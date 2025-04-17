@@ -4,7 +4,8 @@ import { oidcConfig } from "../config/oidcConfig";
 export const useCognitoAuth = () => {
   const auth = useAuth();
 
-  const appSignOutRedirect = () => {
+  const customSignOutRedirect = () => {
+    auth.removeUser();
     const clientId = oidcConfig.clientId;
     const logoutUri = oidcConfig.logoutUri;
     const cognitoDomain = oidcConfig.cognitoDomain;
@@ -15,6 +16,6 @@ export const useCognitoAuth = () => {
 
   return {
     ...auth,
-    appSignOutRedirect,
+    customSignOutRedirect,
   };
 };

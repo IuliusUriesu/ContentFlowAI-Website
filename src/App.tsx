@@ -1,34 +1,22 @@
-import { useCognitoAuth } from "./hooks/useCognitoAuth";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { CognitoAuthProvider } from "./context/CognitoAuthContext";
+import AppLayout from "./layouts/AppLayout";
+import LandingPage from "./pages/LandingPage";
+import CreateContentRequestPage from "./pages/CreateContentRequestPage";
 
 function App() {
-  const auth = useCognitoAuth();
-
-  if (auth.isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (auth.error) {
-    return <div>Encountering error... {auth.error.message}</div>;
-  }
-
-  if (auth.isAuthenticated) {
-    return (
-      <div>
-        <pre> Hello: {auth.user?.profile.name} </pre>
-        <pre> ID Token: {auth.user?.id_token} </pre>
-        <pre> Access Token: {auth.user?.access_token} </pre>
-        <pre> Refresh Token: {auth.user?.refresh_token} </pre>
-
-        <button onClick={() => auth.removeUser()}>Sign out</button>
-      </div>
-    );
-  }
-
   return (
-    <div>
-      <button onClick={() => auth.signinRedirect()}>Sign in</button>
-      <button onClick={() => auth.appSignOutRedirect()}>Sign out</button>
-    </div>
+    <CognitoAuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<AppLayout />}>
+            <Route index element={<LandingPage />} />
+            <Route path="create" element={<CreateContentRequestPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </CognitoAuthProvider>
   );
 }
 

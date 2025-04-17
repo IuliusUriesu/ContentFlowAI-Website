@@ -4,6 +4,6 @@ export const oidcConfig = {
   cognitoDomain:
     "https://eu-central-1v5ojayizc.auth.eu-central-1.amazoncognito.com",
   clientId: "e35bgblf3ak9q76ht5d5lj4v8",
-  redirectUri: "http://localhost:5173/callback",
+  redirectUri: "http://localhost:5173/create",
   logoutUri: "http://localhost:5173",
 };

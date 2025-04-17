@@ -10,10 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.4",
+    "lucide-react": "^0.488.0",
     "oidc-client-ts": "^3.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-oidc-context": "^3.3.0"
+    "react-oidc-context": "^3.3.0",
+    "react-router": "^7.5.0",
+    "tailwindcss": "^4.1.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
