@@ -1,9 +1,9 @@
+import { getEnvVariable } from "../utils/utils";
+
 export const oidcConfig = {
-  authority:
-    "https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_v5OjaYiZc",
-  cognitoDomain:
-    "https://eu-central-1v5ojayizc.auth.eu-central-1.amazoncognito.com",
-  clientId: "e35bgblf3ak9q76ht5d5lj4v8",
-  redirectUri: "http://localhost:5173/create",
-  logoutUri: "http://localhost:5173",
+  authority: getEnvVariable("VITE_OIDC_CONFIG_AUTHORITY"),
+  cognitoDomain: getEnvVariable("VITE_OIDC_CONFIG_COGNITO_DOMAIN"),
+  clientId: getEnvVariable("VITE_OIDC_CONFIG_CLIENT_ID"),
+  redirectUri: getEnvVariable("VITE_OIDC_CONFIG_REDIRECT_URI"),
+  logoutUri: getEnvVariable("VITE_OIDC_CONFIG_LOGOUT_URI"),
 };
