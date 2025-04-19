@@ -5,11 +5,7 @@ export class ApiClient {
 
   constructor(private baseUrl: string) {}
 
-  private async call(
-    method: string,
-    path: string,
-    body?: unknown
-  ): Promise<unknown> {
+  async call(method: string, path: string, body?: unknown): Promise<unknown> {
     const url = new URL(path, this.baseUrl);
 
     let response: Response;
@@ -24,10 +20,10 @@ export class ApiClient {
       });
     } catch (error) {
       console.error(error);
-      throw new ApiError("Fetch failed.");
+      throw new ApiError("Request failed.");
     }
 
-    let responseBody: any;
+    let responseBody: unknown;
     try {
       responseBody = await response.json();
     } catch (error) {
@@ -44,13 +40,5 @@ export class ApiClient {
 
   setAuthToken(token?: string) {
     this.authToken = token;
-  }
-
-  get(path: string): Promise<unknown> {
-    return this.call("GET", path);
-  }
-
-  post(path: string, body: unknown): Promise<unknown> {
-    return this.call("POST", path, body);
   }
 }

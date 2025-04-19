@@ -8,14 +8,16 @@ interface IServiceContext {
   apiService: ContentFlowAiApiService;
 }
 
-export const ServiceContext = createContext<IServiceContext | null>(null);
+export const ServiceContext = createContext<IServiceContext | undefined>(
+  undefined
+);
 
 export function ServiceProvider({ children }: { children: React.ReactNode }) {
   const auth = useCognitoAuth();
 
-  const apiClientRef = useRef<ApiClient | null>(null);
-  const apiServiceRef = useRef<ContentFlowAiApiService | null>(null);
-  const servicesRef = useRef<IServiceContext | null>(null);
+  const apiClientRef = useRef<ApiClient | undefined>(undefined);
+  const apiServiceRef = useRef<ContentFlowAiApiService | undefined>(undefined);
+  const servicesRef = useRef<IServiceContext | undefined>(undefined);
 
   if (!servicesRef.current) {
     apiClientRef.current = new ApiClient(config.apiUrl);
