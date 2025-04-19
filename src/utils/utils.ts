@@ -7,3 +7,18 @@ export function getEnvVariable(key: string): string {
 }
 
 export class DevelopmentError extends Error {}
+
+export class ApiError extends Error {
+  public readonly status?: number;
+  public readonly body?: unknown;
+
+  constructor(message?: string, status?: number, body?: unknown) {
+    super(message);
+    this.status = status;
+    this.body = body;
+
+    Object.setPrototypeOf(this, ApiError.prototype);
+  }
+}
+
+export class ContentFlowAiApiError extends Error {}

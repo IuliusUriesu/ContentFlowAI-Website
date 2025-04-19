@@ -90,7 +90,7 @@
     @apply w-full text-left px-4 py-2 hover:bg-[var(--color-border)];
   }
 
-  .signin-button {
+  .primary-button {
     @apply px-4 py-2 rounded-md bg-[var(--color-primary)] text-white font-medium hover:brightness-110 transition cursor-pointer;
   }
 

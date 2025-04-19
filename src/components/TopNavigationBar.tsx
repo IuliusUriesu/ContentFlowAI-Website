@@ -2,12 +2,14 @@ import { ChevronDown, LogOut } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 import { useCognitoAuth } from "../hooks/useCognitoAuth";
+import { useServices } from "../hooks/useServices";
 
 export default function TopNavigationBar() {
+  const auth = useCognitoAuth();
+  const { apiService } = useServices();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
-
-  const auth = useCognitoAuth();
 
   const userName = auth.user?.profile.name;
 
@@ -22,6 +24,18 @@ export default function TopNavigationBar() {
       <Link to="/" target="_blank" className="app-title">
         ContentFlowAI
       </Link>
+
+      <button
+        className="primary-button"
+        onClick={() => {
+          apiService
+            .helloWorld()
+            .then((data) => console.log(data))
+            .catch((err) => console.log(err));
+        }}
+      >
+        Fetch
+      </button>
 
       <div className="relative">
         {auth.isAuthenticated ? (
@@ -50,7 +64,7 @@ export default function TopNavigationBar() {
         ) : (
           <button
             onClick={() => auth.signinRedirect()}
-            className="signin-button"
+            className="primary-button"
           >
             Sign In
           </button>

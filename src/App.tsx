@@ -5,21 +5,30 @@ import LandingPage from "./pages/LandingPage";
 import CreateContentRequestPage from "./pages/CreateContentRequestPage";
 import ContentRequestPage from "./pages/ContentRequestPage";
 import GeneratedContentPage from "./pages/GeneratedContentPage";
+import { ServiceProvider } from "./context/ServiceContext";
 
 export default function App() {
   return (
     <CognitoAuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<AppLayout />}>
-            <Route index element={<LandingPage />} />
-            <Route path="create" element={<CreateContentRequestPage />} />
-            <Route path="cr/:id" element={<ContentRequestPage />} />
-            <Route path="gc/:id" element={<GeneratedContentPage />} />
-            <Route path="*" element={<Navigate to="/create" replace />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <ServiceProvider>
+        <AppRouter />
+      </ServiceProvider>
     </CognitoAuthProvider>
+  );
+}
+
+function AppRouter() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<LandingPage />} />
+          <Route path="create" element={<CreateContentRequestPage />} />
+          <Route path="cr/:id" element={<ContentRequestPage />} />
+          <Route path="gc/:id" element={<GeneratedContentPage />} />
+          <Route path="*" element={<Navigate to="/create" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
