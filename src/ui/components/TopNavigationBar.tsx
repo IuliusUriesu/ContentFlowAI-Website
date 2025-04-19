@@ -1,8 +1,8 @@
 import { ChevronDown, LogOut } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
-import { useCognitoAuth } from "../hooks/useCognitoAuth";
-import { useServices } from "../hooks/useServices";
+import { useCognitoAuth } from "../../hooks/useCognitoAuth";
+import { useServices } from "../../hooks/useServices";
 
 export default function TopNavigationBar() {
   const auth = useCognitoAuth();

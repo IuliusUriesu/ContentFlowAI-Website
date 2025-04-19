@@ -12,8 +12,6 @@ export class ApiClient {
   ): Promise<unknown> {
     const url = new URL(path, this.baseUrl);
 
-    console.log(this.authToken);
-
     let response: Response;
     try {
       response = await fetch(url, {
