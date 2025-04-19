@@ -31,10 +31,12 @@
 }
 
 @layer base {
+  html,
   body {
     font-family: var(--font-sans);
     background-color: var(--color-bg);
     color: var(--color-text);
+    @apply h-full;
   }
 
   h1,
@@ -59,7 +61,7 @@
 
 @layer components {
   .app-container {
-    @apply min-h-screen flex flex-col bg-[var(--color-bg)] text-[var(--color-text)];
+    @apply h-screen flex flex-col bg-[var(--color-bg)] text-[var(--color-text)];
   }
 
   .nav-bar {
@@ -100,5 +102,73 @@
 
   .signout-icon {
     @apply inline-block mr-2 w-4 h-4 text-[var(--color-error)];
+  }
+
+  .sidebar {
+    @apply w-64
+      bg-[var(--color-surface)]
+      border-r border-[var(--color-border)]
+      flex flex-col
+      p-4
+      /* hide any overflow in the container itself */
+      overflow-hidden;
+  }
+
+  .sidebar-list {
+    @apply space-y-2
+      flex-1               /* fill all vertical space in the sidebar */
+      overflow-y-auto      /* scroll when its contents overflow */
+      min-h-0             /* allow itself to shrink below content height */
+      -mr-4;
+  }
+
+  .sidebar-item {
+    @apply relative h-12 flex items-center px-4 rounded-md
+           text-[var(--color-text)] hover:bg-[var(--color-border)]
+           transition truncate no-underline;
+  }
+
+  /* Fade‑out mask on the right */
+  .sidebar-item::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 1.5rem; /* how wide the fade is */
+    pointer-events: none;
+    /* use background-image here so Tailwind’s parser is happy */
+    background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      var(--color-surface) 100%
+    );
+  }
+
+  .sidebar-item-active {
+    @apply bg-[var(--color-border)];
+  }
+
+  .sidebar-loading {
+    @apply p-2 text-[var(--color-text-muted)];
+  }
+
+  .sidebar-list::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .sidebar-list::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .sidebar-list::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 2px;
+  }
+
+  /* And for Firefox */
+  .sidebar-list {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
   }
 }
