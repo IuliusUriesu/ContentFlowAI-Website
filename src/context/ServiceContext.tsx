@@ -4,11 +4,11 @@ import { ApiClient } from "../lib/ApiClient";
 import { config } from "../config/config";
 import { useCognitoAuth } from "../hooks/useCognitoAuth";
 
-interface IServiceContext {
+type ServiceContextType = {
   apiService: ContentFlowAiApiService;
-}
+};
 
-export const ServiceContext = createContext<IServiceContext | undefined>(
+export const ServiceContext = createContext<ServiceContextType | undefined>(
   undefined
 );
 
@@ -17,7 +17,7 @@ export function ServiceProvider({ children }: { children: React.ReactNode }) {
 
   const apiClientRef = useRef<ApiClient | undefined>(undefined);
   const apiServiceRef = useRef<ContentFlowAiApiService | undefined>(undefined);
-  const servicesRef = useRef<IServiceContext | undefined>(undefined);
+  const servicesRef = useRef<ServiceContextType | undefined>(undefined);
 
   if (!servicesRef.current) {
     apiClientRef.current = new ApiClient(config.apiUrl);
@@ -26,6 +26,7 @@ export function ServiceProvider({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
+    if (!auth.user?.id_token) return;
     apiClientRef.current?.setAuthToken(auth.user?.id_token);
   }, [auth.user?.id_token]);
 

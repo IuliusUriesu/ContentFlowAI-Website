@@ -1,11 +1,20 @@
 import { ApiError } from "../utils/utils";
 
 export class ApiClient {
-  private authToken?: string;
+  private authToken: string;
+  private tokenReadyPromise: Promise<void>;
+  private resolveTokenReadyPromise!: () => void;
 
-  constructor(private baseUrl: string) {}
+  constructor(private baseUrl: string) {
+    this.authToken = "";
+    this.tokenReadyPromise = new Promise((resolve) => {
+      this.resolveTokenReadyPromise = resolve;
+    });
+  }
 
   async call(method: string, path: string, body?: unknown): Promise<unknown> {
+    await this.tokenReadyPromise;
+
     const url = new URL(path, this.baseUrl);
 
     let response: Response;
@@ -38,7 +47,8 @@ export class ApiClient {
     return responseBody;
   }
 
-  setAuthToken(token?: string) {
+  setAuthToken(token: string) {
     this.authToken = token;
+    this.resolveTokenReadyPromise();
   }
 }

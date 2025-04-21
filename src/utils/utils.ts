@@ -6,6 +6,10 @@ export function getEnvVariable(key: string): string {
   return value;
 }
 
+export function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export class DevelopmentError extends Error {}
 
 export class ApiError extends Error {

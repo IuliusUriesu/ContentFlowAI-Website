@@ -1,17 +1,20 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
-import { CognitoAuthProvider } from "./context/CognitoAuthContext";
+import BaseLayout from "./ui/layouts/BaseLayout";
+import SidebarLayout from "./ui/layouts/SidebarLayout";
 import LandingPage from "./ui/pages/LandingPage";
 import CreateContentRequestPage from "./ui/pages/CreateContentRequestPage";
 import ContentRequestPage from "./ui/pages/ContentRequestPage";
+import { CognitoAuthProvider } from "./context/CognitoAuthContext";
 import { ServiceProvider } from "./context/ServiceContext";
-import BaseLayout from "./ui/layouts/BaseLayout";
-import SidebarLayout from "./ui/layouts/SidebarLayout";
+import { ContentRequestsStoreProvider } from "./context/ContentRequestsStoreContext";
 
 export default function App() {
   return (
     <CognitoAuthProvider>
       <ServiceProvider>
-        <AppRouter />
+        <ContentRequestsStoreProvider>
+          <AppRouter />
+        </ContentRequestsStoreProvider>
       </ServiceProvider>
     </CognitoAuthProvider>
   );

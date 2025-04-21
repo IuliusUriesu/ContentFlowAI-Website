@@ -29,7 +29,7 @@ export default function TopNavigationBar() {
             <button onClick={toggleMenu} className="user-button">
               <div className="user-avatar">{initials}</div>
               <span>{userName}</span>
-              <ChevronDown className="user-dropdown-icon" />
+              <ChevronDown className="w-4 h-4 text-[var(--color-text)]" />
             </button>
 
             {isMenuOpen && (

@@ -80,10 +80,6 @@
     @apply w-8 h-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-white;
   }
 
-  .user-dropdown-icon {
-    @apply w-4 h-4 text-[var(--color-text)];
-  }
-
   .user-dropdown-menu {
     @apply absolute right-0 mt-2 w-40 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-md shadow-lg;
   }
@@ -170,5 +166,9 @@
   .sidebar-list {
     scrollbar-width: thin;
     scrollbar-color: var(--color-border) transparent;
+  }
+
+  .retry-button {
+    @apply p-2 rounded-full hover:bg-[var(--color-border)] focus:outline-none cursor-pointer;
   }
 }
