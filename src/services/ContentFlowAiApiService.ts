@@ -11,6 +11,11 @@ import {
 } from "../model/api-responses/GetAllContentRequestsResponse";
 import { ApiError, ContentFlowAiApiError } from "../utils/utils";
 import { ContentRequest } from "../model/app/ContentRequest";
+import {
+  CreateContentRequestResponse,
+  CreateContentRequestResponseSchema,
+} from "../model/api-responses/CreateContentRequestResponse";
+import { CreateContentRequestInput } from "../model/api-requests/CreateContentRequestInput";
 
 // const contentRequests: ContentRequest[] = [
 //   {
@@ -164,6 +169,29 @@ export class ContentFlowAiApiService {
         isRequestProcessed: cr.isRequestProcessed,
       })
     );
+  }
+
+  // POST /v1/content-requests
+  async createContentRequest(
+    input: CreateContentRequestInput
+  ): Promise<ContentRequest> {
+    const body = input;
+    const response = await this.callApi<CreateContentRequestResponse>(
+      CreateContentRequestResponseSchema,
+      "Failed to create content request.",
+      "POST",
+      "/v1/content-requests",
+      body
+    );
+
+    return {
+      id: response.SK,
+      contentFormat: response.contentFormat,
+      contentPiecesCount: response.contentPiecesCount,
+      ideaContext: response.ideaContext,
+      conciseIdeaContext: response.conciseIdeaContext,
+      isRequestProcessed: response.isRequestProcessed,
+    };
   }
 
   // GET /v1

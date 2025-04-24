@@ -1,15 +1,8 @@
 import { z } from "zod";
+import { ContentRequestResponseSchema } from "./ContentRequestResponse";
 
 export const GetAllContentRequestsResponseSchema = z.array(
-  z.object({
-    PK: z.string().startsWith("u#"),
-    SK: z.string().startsWith("cr#"),
-    contentFormat: z.string(),
-    contentPiecesCount: z.number().min(1),
-    ideaContext: z.string(),
-    conciseIdeaContext: z.string(),
-    isRequestProcessed: z.boolean(),
-  })
+  ContentRequestResponseSchema
 );
 
 export type GetAllContentRequestsResponse = z.infer<

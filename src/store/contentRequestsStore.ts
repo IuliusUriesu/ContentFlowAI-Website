@@ -2,19 +2,27 @@ import { ContentRequest } from "../model/app/ContentRequest";
 
 export interface ContentRequestsState {
   items: ContentRequest[];
-  loading: boolean;
-  error: string | null;
+  fetchLoading: boolean;
+  fetchError: string | null;
+  createLoading: boolean;
+  createError: string | null;
 }
 
 export type ContentRequestsAction =
   | { type: "FETCH_INIT" }
   | { type: "FETCH_SUCCESS"; items: ContentRequest[] }
-  | { type: "FETCH_FAILURE"; error: string };
+  | { type: "FETCH_FAILURE"; error: string }
+  | { type: "CREATE_INIT" }
+  | { type: "CREATE_SUCCESS"; item: ContentRequest }
+  | { type: "CREATE_FAILURE"; error: string }
+  | { type: "CREATE_CLEAR_ERROR" };
 
 export const contentRequestsInitialState: ContentRequestsState = {
   items: [],
-  loading: false,
-  error: null,
+  fetchLoading: false,
+  fetchError: null,
+  createLoading: false,
+  createError: null,
 };
 
 export function contentRequestsReducer(
@@ -23,11 +31,41 @@ export function contentRequestsReducer(
 ): ContentRequestsState {
   switch (action.type) {
     case "FETCH_INIT":
-      return { items: state.items, loading: true, error: null };
+      return { ...state, fetchLoading: true, fetchError: null };
     case "FETCH_SUCCESS":
-      return { items: action.items, loading: false, error: null };
+      return {
+        ...state,
+        items: action.items,
+        fetchLoading: false,
+        fetchError: null,
+      };
     case "FETCH_FAILURE":
-      return { items: [], loading: false, error: action.error };
+      return {
+        ...state,
+        items: [],
+        fetchLoading: false,
+        fetchError: action.error,
+      };
+    case "CREATE_INIT":
+      return { ...state, createLoading: true, createError: null };
+    case "CREATE_SUCCESS":
+      return {
+        ...state,
+        items: [action.item, ...state.items],
+        createLoading: false,
+        createError: null,
+      };
+    case "CREATE_FAILURE":
+      return {
+        ...state,
+        createLoading: false,
+        createError: action.error,
+      };
+    case "CREATE_CLEAR_ERROR":
+      return {
+        ...state,
+        createError: null,
+      };
     default:
       return state;
   }

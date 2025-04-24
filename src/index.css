@@ -19,6 +19,7 @@
 
   /* Borders */
   --color-border: #2e2e2e;
+  --color-border-light: #5d5d5d;
 
   /* Accent (Indigo) */
   --color-primary: #4f46e5; /* Indigo 600 from Tailwind */
@@ -65,7 +66,7 @@
   }
 
   .nav-bar {
-    @apply flex items-center justify-between px-6 py-4 bg-[var(--color-surface)] border-b border-[var(--color-border)] shadow-md;
+    @apply flex items-center justify-between px-6 py-4 bg-[var(--color-surface)] border-b border-[var(--color-border)];
   }
 
   .app-title {
@@ -81,15 +82,15 @@
   }
 
   .user-dropdown-menu {
-    @apply absolute right-0 mt-2 w-40 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-md shadow-lg;
+    @apply absolute right-0 mt-2 w-40 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl;
   }
 
   .user-dropdown-item {
-    @apply w-full text-left px-4 py-2 hover:bg-[var(--color-border)];
+    @apply w-full text-left px-4 py-2 hover:bg-[var(--color-border)] rounded-xl;
   }
 
   .primary-button {
-    @apply px-4 py-2 rounded-md bg-[var(--color-primary)] text-white font-medium hover:brightness-110 transition cursor-pointer;
+    @apply px-4 py-2 rounded-xl bg-[var(--color-primary)] text-white font-medium hover:brightness-110 transition cursor-pointer;
   }
 
   .signout-button {
@@ -101,7 +102,7 @@
   }
 
   .sidebar {
-    @apply w-64
+    @apply w-72
       bg-[var(--color-surface)]
       border-r border-[var(--color-border)]
       flex flex-col
@@ -113,14 +114,13 @@
   .sidebar-list {
     @apply space-y-2
       flex-1               /* fill all vertical space in the sidebar */
-      overflow-y-auto      /* scroll when its contents overflow */
       min-h-0             /* allow itself to shrink below content height */
       -mr-4;
   }
 
   .sidebar-item {
-    @apply relative h-12 flex items-center px-4 rounded-md
-           text-[var(--color-text)] hover:bg-[var(--color-border)]
+    @apply relative h-12 flex items-center px-4 rounded-xl
+           text-[var(--color-text)] text-sm hover:bg-[var(--color-border)]
            transition truncate no-underline;
   }
 
@@ -149,26 +149,58 @@
     @apply p-2 text-[var(--color-text-muted)];
   }
 
-  .sidebar-list::-webkit-scrollbar {
-    width: 4px;
+  .retry-button {
+    @apply p-2 rounded-full hover:bg-[var(--color-border)] focus:outline-none cursor-pointer;
   }
 
-  .sidebar-list::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .sidebar-list::-webkit-scrollbar-thumb {
-    background-color: var(--color-border);
-    border-radius: 2px;
-  }
-
-  /* And for Firefox */
-  .sidebar-list {
+  .custom-scrollbar {
+    @apply overflow-y-auto;
     scrollbar-width: thin;
     scrollbar-color: var(--color-border) transparent;
   }
 
-  .retry-button {
-    @apply p-2 rounded-full hover:bg-[var(--color-border)] focus:outline-none cursor-pointer;
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 2px;
+  }
+
+  .chat-box-question {
+    @apply text-3xl font-bold text-center text-[var(--color-text)];
+  }
+
+  .chat-box {
+    @apply bg-[var(--color-surface)] border border-[var(--color-border-light)] rounded-4xl py-4 pr-4 pl-6 space-y-4;
+  }
+
+  .chat-box-textarea {
+    @apply w-full bg-transparent text-[var(--color-text)] placeholder-[var(--color-text-muted)] resize-none outline-none min-h-[72px] pr-2;
+  }
+
+  .chat-box-fields-container {
+    @apply flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4;
+  }
+
+  .chat-box-dropdown {
+    @apply bg-[var(--color-surface)] border border-[var(--color-border-light)] text-[var(--color-text)] rounded-full px-3 py-2 flex items-center justify-between focus:outline-none cursor-pointer;
+  }
+
+  .chat-box-dropdown-list {
+    @apply absolute left-0 mt-1 bg-[var(--color-surface)] border border-[var(--color-border-light)] rounded-xl shadow-lg max-h-60 overflow-auto z-10;
+  }
+
+  .chat-box-dropdown-item {
+    @apply cursor-pointer px-3 py-2 flex items-center justify-between hover:bg-[var(--color-border)] text-[var(--color-text)] font-semibold;
+  }
+
+  .chat-box-send-button {
+    @apply sm:ml-auto bg-[var(--color-primary)] p-3 rounded-full hover:brightness-110 transition text-white flex items-center justify-center cursor-pointer;
   }
 }

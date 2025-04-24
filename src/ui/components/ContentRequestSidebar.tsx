@@ -10,7 +10,7 @@ export default function ContentRequestSidebar() {
     <nav className="sidebar">
       <Link
         to="/create"
-        className={`flex items-center space-x-2  sidebar-item ${
+        className={`flex items-center space-x-2  sidebar-item text-base ${
           isCreateLinkActive ? "sidebar-item-active" : ""
         }`}
         title="Create new content"
@@ -19,7 +19,7 @@ export default function ContentRequestSidebar() {
         <span className="font-semibold">Create...</span>
       </Link>
 
-      <hr className="border-t-2 border-[var(--color-border)] my-2" />
+      <hr className="border-t border-[var(--color-border-light)] my-2" />
 
       <ContentRequestSidebarList />
     </nav>
