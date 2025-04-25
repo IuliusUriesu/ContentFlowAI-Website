@@ -1,10 +1,16 @@
-import { createContext, useEffect, useReducer } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+} from "react";
 import {
   ContentRequestsAction,
   contentRequestsInitialState,
   contentRequestsReducer,
   ContentRequestsState,
-} from "../store/contentRequestsStore";
+} from "../reducers/contentRequestsReducer";
 import { useServices } from "../hooks/useServices";
 import { useCognitoAuth } from "../hooks/useCognitoAuth";
 
@@ -31,7 +37,7 @@ export function ContentRequestsStoreProvider({
   const auth = useCognitoAuth();
   const { apiService } = useServices();
 
-  const fetchContentRequests = () => {
+  const fetchContentRequests = useCallback(() => {
     dispatch({ type: "FETCH_INIT" });
     apiService
       .getAllContentRequests()
@@ -39,17 +45,20 @@ export function ContentRequestsStoreProvider({
       .catch((error) =>
         dispatch({ type: "FETCH_FAILURE", error: (error as Error).message })
       );
-  };
+  }, [apiService]);
 
   useEffect(() => {
     if (!auth.isAuthenticated) return;
     fetchContentRequests();
-  }, [auth.isAuthenticated]);
+  }, [auth.isAuthenticated, fetchContentRequests]);
+
+  const store: ContentRequestsStoreContextType = useMemo(
+    () => ({ state, dispatch, fetchContentRequests }),
+    [state, fetchContentRequests]
+  );
 
   return (
-    <ContentRequestsStoreContext.Provider
-      value={{ state, dispatch, fetchContentRequests }}
-    >
+    <ContentRequestsStoreContext.Provider value={store}>
       {children}
     </ContentRequestsStoreContext.Provider>
   );

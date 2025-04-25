@@ -6,7 +6,7 @@ export default function BaseLayout() {
     <div className="app-container">
       <TopNavigationBar />
 
-      <main className="flex-grow p-6">
+      <main className="flex-grow p-6 custom-scrollbar">
         <Outlet />
       </main>
     </div>

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 import BaseLayout from "./ui/layouts/BaseLayout";
 import SidebarLayout from "./ui/layouts/SidebarLayout";
 import LandingPage from "./ui/pages/LandingPage";
@@ -7,6 +7,8 @@ import ContentRequestPage from "./ui/pages/ContentRequestPage";
 import { CognitoAuthProvider } from "./context/CognitoAuthContext";
 import { ServiceProvider } from "./context/ServiceContext";
 import { ContentRequestsStoreProvider } from "./context/ContentRequestsStoreContext";
+import NavigateToCreate from "./ui/components/NavigateToCreate";
+import GeneratedContentPage from "./ui/pages/GeneratedContentPage";
 
 export default function App() {
   return (
@@ -26,6 +28,7 @@ function AppRouter() {
       <Routes>
         <Route element={<BaseLayout />}>
           <Route path="/" element={<LandingPage />} />
+          <Route path="gc/:id" element={<GeneratedContentPage />} />
         </Route>
 
         <Route element={<SidebarLayout />}>
@@ -33,7 +36,7 @@ function AppRouter() {
           <Route path="cr/:id" element={<ContentRequestPage />} />
         </Route>
 
-        <Route path="*" element={<Navigate to="/create" replace />} />
+        <Route path="*" element={<NavigateToCreate />} />
       </Routes>
     </BrowserRouter>
   );

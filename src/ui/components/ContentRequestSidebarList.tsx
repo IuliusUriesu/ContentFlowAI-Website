@@ -1,38 +1,29 @@
 import { Link, useLocation } from "react-router";
 import { useContentRequestsStore } from "../../hooks/useContentRequestsStore";
-import { Loader, RefreshCw } from "lucide-react";
+import ErrorWithRetry from "./ErrorWithRetry";
+import SpinningLoader from "./SpinningLoader";
 
 export default function ContentRequestSidebarList() {
   const location = useLocation();
   const { state, fetchContentRequests } = useContentRequestsStore();
-  const { items, fetchLoading, fetchError } = state;
+  const { contentRequests, fetchLoading, fetchError } = state;
 
   if (fetchLoading) {
-    return (
-      <div className="flex-1 flex items-center justify-center">
-        <Loader className="animate-spin" size={24} />
-      </div>
-    );
+    return <SpinningLoader />;
   }
 
   if (fetchError) {
-    const handleRetry = () => {
-      fetchContentRequests();
-    };
-
     return (
-      <div className="flex-1 flex flex-col items-center justify-center space-y-2 px-4 text-center">
-        <span className="text-[var(--color-error)]">{fetchError}</span>
-        <button onClick={handleRetry} className="retry-button" title="Retry">
-          <RefreshCw className="w-6 h-6 text-[var(--color-error)]" />
-        </button>
-      </div>
+      <ErrorWithRetry
+        errorMessage={fetchError}
+        handleRetry={() => fetchContentRequests()}
+      />
     );
   }
 
   return (
     <ul className="sidebar-list custom-scrollbar">
-      {items.map((cr) => {
+      {contentRequests.map((cr) => {
         const parts = cr.id.split("#");
         const uuid = parts[parts.length - 1];
         const to = `/cr/${uuid}`;

@@ -1,12 +1,20 @@
 import { ContentRequest } from "../model/app/ContentRequest";
 
 export interface ContentRequestsState {
-  items: ContentRequest[];
+  contentRequests: ContentRequest[];
   fetchLoading: boolean;
   fetchError: string | null;
   createLoading: boolean;
   createError: string | null;
 }
+
+export const contentRequestsInitialState: ContentRequestsState = {
+  contentRequests: [],
+  fetchLoading: false,
+  fetchError: null,
+  createLoading: false,
+  createError: null,
+};
 
 export type ContentRequestsAction =
   | { type: "FETCH_INIT" }
@@ -16,14 +24,6 @@ export type ContentRequestsAction =
   | { type: "CREATE_SUCCESS"; item: ContentRequest }
   | { type: "CREATE_FAILURE"; error: string }
   | { type: "CREATE_CLEAR_ERROR" };
-
-export const contentRequestsInitialState: ContentRequestsState = {
-  items: [],
-  fetchLoading: false,
-  fetchError: null,
-  createLoading: false,
-  createError: null,
-};
 
 export function contentRequestsReducer(
   state: ContentRequestsState,
@@ -35,14 +35,14 @@ export function contentRequestsReducer(
     case "FETCH_SUCCESS":
       return {
         ...state,
-        items: action.items,
+        contentRequests: action.items,
         fetchLoading: false,
         fetchError: null,
       };
     case "FETCH_FAILURE":
       return {
         ...state,
-        items: [],
+        contentRequests: [],
         fetchLoading: false,
         fetchError: action.error,
       };
@@ -51,7 +51,7 @@ export function contentRequestsReducer(
     case "CREATE_SUCCESS":
       return {
         ...state,
-        items: [action.item, ...state.items],
+        contentRequests: [action.item, ...state.contentRequests],
         createLoading: false,
         createError: null,
       };

@@ -10,7 +10,7 @@ export default function SidebarLayout() {
       <div className="flex flex-1 overflow-hidden">
         <ContentRequestSidebar />
 
-        <main className="flex-grow p-6 overflow-auto">
+        <main className="flex-grow p-6 custom-scrollbar">
           <Outlet />
         </main>
       </div>
