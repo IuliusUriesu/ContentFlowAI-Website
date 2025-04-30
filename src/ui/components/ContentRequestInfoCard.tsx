@@ -5,9 +5,7 @@ interface ContentRequestInfoCardProps {
   contentRequest: ContentRequest;
 }
 
-export default function ContentRequestInfoCard({
-  contentRequest,
-}: ContentRequestInfoCardProps) {
+export default function ContentRequestInfoCard({ contentRequest }: ContentRequestInfoCardProps) {
   const { ideaContext, contentFormat } = contentRequest;
 
   return (

@@ -2,10 +2,7 @@ interface ContentFormatPillProps {
   contentFormat: string;
 }
 
-const contentFormatStyleMap: Record<
-  string,
-  { bg: string; text: string; border: string }
-> = {
+const contentFormatStyleMap: Record<string, { bg: string; text: string; border: string }> = {
   "LinkedIn Post": {
     bg: "bg-[#0A66C2]/20",
     text: "text-[#0A66C2]",
@@ -23,9 +20,7 @@ const contentFormatStyleMap: Record<
   },
 };
 
-export default function ContentFormatPill({
-  contentFormat,
-}: ContentFormatPillProps) {
+export default function ContentFormatPill({ contentFormat }: ContentFormatPillProps) {
   const contentFormatStyle = contentFormatStyleMap[contentFormat] || {
     bg: "bg-[var(--color-surface)]",
     text: "text-[var(--color-text)]",

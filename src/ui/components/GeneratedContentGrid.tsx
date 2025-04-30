@@ -5,9 +5,7 @@ interface GeneratedContentGridProps {
   generatedContent: GeneratedContentPiece[];
 }
 
-export default function GeneratedContentGrid({
-  generatedContent,
-}: GeneratedContentGridProps) {
+export default function GeneratedContentGrid({ generatedContent }: GeneratedContentGridProps) {
   const navigate = useNavigate();
 
   return (
@@ -20,9 +18,7 @@ export default function GeneratedContentGrid({
           }}
           className="generated-content-card"
         >
-          <p className="text-sm text-[var(--color-text)] line-clamp-4">
-            {gc.idea}
-          </p>
+          <p className="text-sm text-[var(--color-text)] line-clamp-4">{gc.idea}</p>
         </div>
       ))}
     </div>

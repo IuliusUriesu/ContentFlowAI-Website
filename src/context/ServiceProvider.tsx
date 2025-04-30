@@ -23,9 +23,5 @@ export function ServiceProvider({ children }: { children: React.ReactNode }) {
     apiClientRef.current?.setAuthToken(auth.user?.id_token);
   }, [auth.user?.id_token]);
 
-  return (
-    <ServiceContext.Provider value={servicesRef.current}>
-      {children}
-    </ServiceContext.Provider>
-  );
+  return <ServiceContext.Provider value={servicesRef.current}>{children}</ServiceContext.Provider>;
 }

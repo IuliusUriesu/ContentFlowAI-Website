@@ -5,6 +5,4 @@ export type ServiceContextType = {
   apiService: ContentFlowAiApiService;
 };
 
-export const ServiceContext = createContext<ServiceContextType | undefined>(
-  undefined
-);
+export const ServiceContext = createContext<ServiceContextType | undefined>(undefined);

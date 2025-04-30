@@ -5,10 +5,7 @@ interface ErrorWithRetryProps {
   onRetry: () => void;
 }
 
-export default function ErrorWithRetry({
-  errorMessage,
-  onRetry,
-}: ErrorWithRetryProps) {
+export default function ErrorWithRetry({ errorMessage, onRetry }: ErrorWithRetryProps) {
   return (
     <div className="centered-container">
       <span className="text-[var(--color-error)]">{errorMessage}</span>

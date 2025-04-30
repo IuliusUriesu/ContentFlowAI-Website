@@ -35,47 +35,43 @@ export class ContentFlowAiApiService {
       GetAllContentRequestsResponseSchema,
       "Failed to retrieve content requests.",
       "GET",
-      "/v1/content-requests"
+      "/v1/content-requests",
     );
   }
 
   // GET /v1/content-requests/{content-request-id}
-  async getContentRequest(
-    input: GetContentRequestInput
-  ): Promise<ContentRequest> {
+  async getContentRequest(input: GetContentRequestInput): Promise<ContentRequest> {
     const { contentRequestId } = input;
     return this.callApi<GetContentRequestResponse>(
       GetContentRequestResponseSchema,
       "Failed to retrieve content request.",
       "GET",
-      `/v1/content-requests/${contentRequestId}`
+      `/v1/content-requests/${contentRequestId}`,
     );
   }
 
   // POST /v1/content-requests
-  async createContentRequest(
-    input: CreateContentRequestInput
-  ): Promise<ContentRequest> {
+  async createContentRequest(input: CreateContentRequestInput): Promise<ContentRequest> {
     const body = input;
     return this.callApi<CreateContentRequestResponse>(
       CreateContentRequestResponseSchema,
       "Failed to create content request.",
       "POST",
       "/v1/content-requests",
-      body
+      body,
     );
   }
 
   // GET /v1/content-requests/{content-request-id}/generated-content
   async getAllGeneratedContent(
-    input: GetAllGeneratedContentInput
+    input: GetAllGeneratedContentInput,
   ): Promise<GeneratedContentPiece[]> {
     const { contentRequestId } = input;
     return this.callApi<GetAllGeneratedContentResponse>(
       GetAllGeneratedContentResponseSchema,
       "Failed to retrieve generated content.",
       "GET",
-      `/v1/content-requests/${contentRequestId}/generated-content`
+      `/v1/content-requests/${contentRequestId}/generated-content`,
     );
   }
 
@@ -84,7 +80,7 @@ export class ContentFlowAiApiService {
     defaultErrorMessage: string,
     method: string,
     path: string,
-    body?: unknown
+    body?: unknown,
   ): Promise<T> {
     let response: unknown;
     try {

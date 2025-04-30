@@ -20,10 +20,7 @@ export default function ChatBoxDropdown({
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -34,10 +31,7 @@ export default function ChatBoxDropdown({
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative inline-block text-left text-sm tracking-wide"
-    >
+    <div ref={containerRef} className="relative inline-block text-left text-sm tracking-wide">
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
@@ -52,10 +46,7 @@ export default function ChatBoxDropdown({
       </button>
 
       {isOpen && (
-        <ul
-          role="listbox"
-          className={`chat-box-dropdown-list ${widthClassName ?? "w-48"}`}
-        >
+        <ul role="listbox" className={`chat-box-dropdown-list ${widthClassName ?? "w-48"}`}>
           {options.map((opt) => (
             <li
               key={opt}
@@ -70,9 +61,7 @@ export default function ChatBoxDropdown({
               }`}
             >
               <span>{opt}</span>
-              {value === opt && (
-                <Check className="h-5 w-5 text-[var(--color-text)]" />
-              )}
+              {value === opt && <Check className="h-5 w-5 text-[var(--color-text)]" />}
             </li>
           ))}
         </ul>

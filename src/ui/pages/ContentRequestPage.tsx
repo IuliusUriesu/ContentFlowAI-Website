@@ -8,8 +8,7 @@ import { useContentRequest } from "../../hooks/useContentRequest";
 
 export default function ContentRequestPage() {
   const { id } = useParams();
-  const { contentRequest, generatedContent, isLoading, error, retry } =
-    useContentRequest(id ?? "");
+  const { contentRequest, generatedContent, isLoading, error, retry } = useContentRequest(id ?? "");
 
   if (!id) {
     return <NavigateToCreate />;
@@ -31,8 +30,8 @@ export default function ContentRequestPage() {
               {!contentRequest.isRequestProcessed ? (
                 <div className="centered-container">
                   <span className="text-[var(--color-info)]">
-                    We're crafting your content. It'll be worth the wait — check
-                    back in a few minutes!
+                    We're crafting your content. It'll be worth the wait — check back in a few
+                    minutes!
                   </span>
                 </div>
               ) : (

@@ -48,10 +48,7 @@ export default function TopNavigationBar() {
             )}
           </>
         ) : (
-          <button
-            onClick={() => auth.signinRedirect()}
-            className="primary-button"
-          >
+          <button onClick={() => auth.signinRedirect()} className="primary-button">
             Sign In
           </button>
         )}

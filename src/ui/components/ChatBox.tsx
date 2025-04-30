@@ -6,20 +6,14 @@ import { useCreateContentRequest } from "../../hooks/useCreateContentRequest";
 const defaultContentFormat = "Content format";
 const defaultContentPiecesCount = "How many?";
 
-const contentFormatOptions = [
-  "LinkedIn Post",
-  "X (Twitter) Tweet",
-  "Instagram Thread",
-];
+const contentFormatOptions = ["LinkedIn Post", "X (Twitter) Tweet", "Instagram Thread"];
 
 const contentPiecesCountOptions = ["3", "5", "10", "15"];
 
 export default function ChatBox() {
   const [idea, setIdea] = useState("");
   const [contentFormat, setContentFormat] = useState(defaultContentFormat);
-  const [contentPiecesCount, setContentPiecesCount] = useState(
-    defaultContentPiecesCount
-  );
+  const [contentPiecesCount, setContentPiecesCount] = useState(defaultContentPiecesCount);
   const [validationError, setValidationError] = useState<string | null>(null);
 
   const { isLoading, error, create } = useCreateContentRequest();
@@ -34,9 +28,7 @@ export default function ChatBox() {
     setValidationError(null);
 
     if (idea.trim().length === 0) {
-      setValidationError(
-        "An idea (even a short one) is required to create content."
-      );
+      setValidationError("An idea (even a short one) is required to create content.");
       return;
     }
 
@@ -61,9 +53,7 @@ export default function ChatBox() {
 
   return (
     <div className="w-full max-w-3xl rounded-2xl p-8 space-y-6">
-      <h1 className="chat-box-question">
-        What do you want to create content about?
-      </h1>
+      <h1 className="chat-box-question">What do you want to create content about?</h1>
 
       <div className="flex flex-col space-y-4">
         <div className="chat-box">
@@ -90,10 +80,7 @@ export default function ChatBox() {
             />
 
             {isLoading ? (
-              <button
-                disabled
-                className="chat-box-send-button cursor-auto hover:brightness-100"
-              >
+              <button disabled className="chat-box-send-button cursor-auto hover:brightness-100">
                 <Loader className="w-5 h-5 animate-spin" />
               </button>
             ) : (
@@ -104,9 +91,7 @@ export default function ChatBox() {
           </div>
         </div>
 
-        {displayError && (
-          <p className="text-[var(--color-error)] pl-2">{displayError}</p>
-        )}
+        {displayError && <p className="text-[var(--color-error)] pl-2">{displayError}</p>}
       </div>
     </div>
   );

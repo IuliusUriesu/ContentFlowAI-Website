@@ -20,7 +20,7 @@ export const useContentRequests = (): UseContentRequestsReturnType => {
   const { data, isLoading, error } = useSWR(
     auth.isAuthenticated ? swrKey : null,
     () => apiService.getAllContentRequests(),
-    { revalidateIfStale: false }
+    { revalidateIfStale: false },
   );
 
   return {

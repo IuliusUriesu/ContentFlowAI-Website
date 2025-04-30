@@ -10,7 +10,7 @@ export const useCognitoAuth = () => {
     const logoutUri = config.oidc.logoutUri;
     const cognitoDomain = config.oidc.cognitoDomain;
     window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(
-      logoutUri
+      logoutUri,
     )}`;
   };
 

@@ -13,49 +13,48 @@ type UseCreateContentRequestReturnType = {
 
 const swrKey = "content-requests";
 
-export const useCreateContentRequest =
-  (): UseCreateContentRequestReturnType => {
-    const auth = useCognitoAuth();
-    const { apiService } = useServices();
-    const { mutate } = useSWRConfig();
+export const useCreateContentRequest = (): UseCreateContentRequestReturnType => {
+  const auth = useCognitoAuth();
+  const { apiService } = useServices();
+  const { mutate } = useSWRConfig();
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-    const create = useCallback(
-      async (input: CreateContentRequestInput) => {
-        let errorMessage: string | undefined;
-        if (!auth.isAuthenticated) {
-          errorMessage = "Sign in to start creating content.";
-        }
+  const create = useCallback(
+    async (input: CreateContentRequestInput) => {
+      let errorMessage: string | undefined;
+      if (!auth.isAuthenticated) {
+        errorMessage = "Sign in to start creating content.";
+      }
 
-        if (errorMessage) {
-          setIsLoading(false);
-          setError(errorMessage);
-          throw new Error(errorMessage);
-        }
+      if (errorMessage) {
+        setIsLoading(false);
+        setError(errorMessage);
+        throw new Error(errorMessage);
+      }
 
-        setIsLoading(true);
-        setError(null);
+      setIsLoading(true);
+      setError(null);
 
-        try {
-          const cr = await apiService.createContentRequest(input);
-          mutate(swrKey, (prev: ContentRequest[] = []) => [cr, ...prev], {
-            revalidate: false,
-          });
-        } catch (error) {
-          setError((error as Error).message);
-          throw error;
-        } finally {
-          setIsLoading(false);
-        }
-      },
-      [auth.isAuthenticated, apiService, mutate]
-    );
+      try {
+        const cr = await apiService.createContentRequest(input);
+        mutate(swrKey, (prev: ContentRequest[] = []) => [cr, ...prev], {
+          revalidate: false,
+        });
+      } catch (error) {
+        setError((error as Error).message);
+        throw error;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [auth.isAuthenticated, apiService, mutate],
+  );
 
-    return {
-      create,
-      isLoading,
-      error,
-    };
+  return {
+    create,
+    isLoading,
+    error,
   };
+};

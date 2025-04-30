@@ -25,9 +25,7 @@ export default function ContentRequestSidebarList() {
           <li key={cr.id}>
             <Link
               to={to}
-              className={`sidebar-item ${
-                isActive ? "sidebar-item-active" : ""
-              }`}
+              className={`sidebar-item ${isActive ? "sidebar-item-active" : ""}`}
               title={cr.conciseIdeaContext}
             >
               {cr.conciseIdeaContext}
