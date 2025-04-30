@@ -1,12 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ChatBoxDropdown from "./ChatBoxDropdown";
 import { Loader, Send } from "lucide-react";
-import { useContentRequestsStore } from "../../hooks/useContentRequestsStore";
-import { useServices } from "../../hooks/useServices";
-import { useCognitoAuth } from "../../hooks/useCognitoAuth";
+import { useCreateContentRequest } from "../../hooks/useCreateContentRequest";
 
 const defaultContentFormat = "Content format";
 const defaultContentPiecesCount = "How many?";
+
+const contentFormatOptions = [
+  "LinkedIn Post",
+  "X (Twitter) Tweet",
+  "Instagram Thread",
+];
+
+const contentPiecesCountOptions = ["3", "5", "10", "15"];
 
 export default function ChatBox() {
   const [idea, setIdea] = useState("");
@@ -14,24 +20,9 @@ export default function ChatBox() {
   const [contentPiecesCount, setContentPiecesCount] = useState(
     defaultContentPiecesCount
   );
+  const [validationError, setValidationError] = useState<string | null>(null);
 
-  const { state, dispatch } = useContentRequestsStore();
-  const { createLoading, createError } = state;
-
-  const auth = useCognitoAuth();
-  const { apiService } = useServices();
-
-  useEffect(() => {
-    return () => dispatch({ type: "CREATE_CLEAR_ERROR" });
-  }, [dispatch]);
-
-  const contentFormatOptions = [
-    "LinkedIn Post",
-    "X (Twitter) Tweet",
-    "Instagram Thread",
-  ];
-
-  const contentPiecesCountOptions = ["3", "5", "10", "15"];
+  const { isLoading, error, create } = useCreateContentRequest();
 
   const resetFields = () => {
     setIdea("");
@@ -39,55 +30,34 @@ export default function ChatBox() {
     setContentPiecesCount(defaultContentPiecesCount);
   };
 
-  const handleSend = () => {
-    dispatch({ type: "CREATE_INIT" });
+  const handleSend = async () => {
+    setValidationError(null);
 
-    if (!auth.isAuthenticated) {
-      dispatch({
-        type: "CREATE_FAILURE",
-        error: "Sign in to start creating content.",
-      });
-      return;
-    }
-
-    if (idea.length === 0) {
-      dispatch({
-        type: "CREATE_FAILURE",
-        error: "An idea (even a short one) is required to create content.",
-      });
+    if (idea.trim().length === 0) {
+      setValidationError(
+        "An idea (even a short one) is required to create content."
+      );
       return;
     }
 
     if (contentFormat === defaultContentFormat) {
-      dispatch({
-        type: "CREATE_FAILURE",
-        error: "You must choose a format for the content.",
-      });
+      setValidationError("You must choose a format for the content.");
       return;
     }
 
     if (contentPiecesCount === defaultContentPiecesCount) {
-      dispatch({
-        type: "CREATE_FAILURE",
-        error: "How many content pieces do you want?",
-      });
+      setValidationError("How many content pieces do you want?");
       return;
     }
 
-    apiService
-      .createContentRequest({
-        ideaContext: idea,
-        contentFormat,
-        contentPiecesCount: +contentPiecesCount,
-      })
-      .then((item) => {
-        dispatch({ type: "CREATE_SUCCESS", item });
-        resetFields();
-      })
-      .catch((error) =>
-        dispatch({ type: "CREATE_FAILURE", error: (error as Error).message })
-      );
+    create({
+      ideaContext: idea.trim(),
+      contentFormat,
+      contentPiecesCount: Number(contentPiecesCount),
+    }).then(() => resetFields());
   };
+
+  const displayError = validationError ?? error ?? null;
 
   return (
     <div className="w-full max-w-3xl rounded-2xl p-8 space-y-6">
@@ -119,7 +89,7 @@ export default function ChatBox() {
               widthClassName="w-32"
             />
 
-            {createLoading ? (
+            {isLoading ? (
               <button
                 disabled
                 className="chat-box-send-button cursor-auto hover:brightness-100"
@@ -134,8 +104,8 @@ export default function ChatBox() {
           </div>
         </div>
 
-        {createError && (
-          <p className="text-[var(--color-error)] pl-2">{createError}</p>
+        {displayError && (
+          <p className="text-[var(--color-error)] pl-2">{displayError}</p>
         )}
       </div>
     </div>

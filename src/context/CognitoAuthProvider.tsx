@@ -10,7 +10,7 @@ const cognitoAuthConfig = {
   scope: "email openid profile",
 };
 
-export function CognitoAuthProvider({
+export default function CognitoAuthProvider({
   children,
 }: {
   children: React.ReactNode;

@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { GeneratedContentPieceResponseSchema } from "./GeneratedContentPieceResponse";
+import { GeneratedContentPieceSchema } from "../domain/GeneratedContentPiece";
 
 export const GetAllGeneratedContentResponseSchema = z.array(
-  GeneratedContentPieceResponseSchema
+  GeneratedContentPieceSchema
 );
 
 export type GetAllGeneratedContentResponse = z.infer<

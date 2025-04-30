@@ -1,4 +1,4 @@
-import { ContentRequest } from "../../model/app/ContentRequest";
+import { ContentRequest } from "../../model/domain/ContentRequest";
 import ContentFormatPill from "./ContentFormatPill";
 
 interface ContentRequestInfoCardProps {

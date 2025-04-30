@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { GeneratedContentPiece } from "../../model/app/GeneratedContentPiece";
+import { GeneratedContentPiece } from "../../model/domain/GeneratedContentPiece";
 
 interface GeneratedContentGridProps {
   generatedContent: GeneratedContentPiece[];
@@ -16,9 +16,7 @@ export default function GeneratedContentGrid({
         <div
           key={gc.id}
           onClick={() => {
-            const parts = gc.id.split("#");
-            const uuid = parts[parts.length - 1];
-            navigate(`/gc/${uuid}`);
+            navigate(`/gc/${gc.id}`);
           }}
           className="generated-content-card"
         >

@@ -1,49 +1,45 @@
-import { useContentRequestsStore } from "../../hooks/useContentRequestsStore";
 import { useParams } from "react-router";
 import NavigateToCreate from "../components/NavigateToCreate";
 import ContentRequestInfoCard from "../components/ContentRequestInfoCard";
-import { useMemo } from "react";
-import { useGeneratedContent } from "../../hooks/useGeneratedContent";
 import ErrorWithRetry from "../components/ErrorWithRetry";
 import SpinningLoader from "../components/SpinningLoader";
 import GeneratedContentGrid from "../components/GeneratedContentGrid";
+import { useContentRequest } from "../../hooks/useContentRequest";
 
 export default function ContentRequestPage() {
   const { id } = useParams();
-  const { state: contentRequestsState } = useContentRequestsStore();
+  const { contentRequest, generatedContent, isLoading, error, retry } =
+    useContentRequest(id ?? "");
 
-  const contentRequest = useMemo(
-    () =>
-      contentRequestsState.contentRequests.find((cr) =>
-        cr.id.endsWith(`#${id}`)
-      ),
-    [contentRequestsState.contentRequests, id]
-  );
-
-  const { state: generatedContentState, fetchGeneratedContent } =
-    useGeneratedContent(contentRequest?.id ?? "");
-
-  if (!id || !contentRequest) {
+  if (!id) {
     return <NavigateToCreate />;
   }
 
   return (
     <div className="w-full space-y-8">
       <div className="max-w-5xl mx-auto w-full space-y-8">
-        <ContentRequestInfoCard contentRequest={contentRequest} />
-        <hr className="border-[var(--color-border-light)]" />
-
-        {generatedContentState.loading ? (
+        {isLoading ? (
           <SpinningLoader />
-        ) : generatedContentState.error ? (
-          <ErrorWithRetry
-            errorMessage={generatedContentState.error}
-            handleRetry={() => fetchGeneratedContent()}
-          />
+        ) : error ? (
+          <ErrorWithRetry errorMessage={error} onRetry={retry} />
         ) : (
-          <GeneratedContentGrid
-            generatedContent={generatedContentState.generatedContent}
-          />
+          contentRequest && (
+            <>
+              <ContentRequestInfoCard contentRequest={contentRequest} />
+              <hr className="border-[var(--color-border-light)]" />
+
+              {!contentRequest.isRequestProcessed ? (
+                <div className="centered-container">
+                  <span className="text-[var(--color-info)]">
+                    We're crafting your content. It'll be worth the wait — check
+                    back in a few minutes!
+                  </span>
+                </div>
+              ) : (
+                <GeneratedContentGrid generatedContent={generatedContent} />
+              )}
+            </>
+          )
         )}
       </div>
     </div>

@@ -1,32 +1,25 @@
 import { Link, useLocation } from "react-router";
-import { useContentRequestsStore } from "../../hooks/useContentRequestsStore";
 import ErrorWithRetry from "./ErrorWithRetry";
 import SpinningLoader from "./SpinningLoader";
+import { useContentRequests } from "../../hooks/useContentRequests";
 
 export default function ContentRequestSidebarList() {
   const location = useLocation();
-  const { state, fetchContentRequests } = useContentRequestsStore();
-  const { contentRequests, fetchLoading, fetchError } = state;
 
-  if (fetchLoading) {
+  const { contentRequests, isLoading, error, retry } = useContentRequests();
+
+  if (isLoading) {
     return <SpinningLoader />;
   }
 
-  if (fetchError) {
-    return (
-      <ErrorWithRetry
-        errorMessage={fetchError}
-        handleRetry={() => fetchContentRequests()}
-      />
-    );
+  if (error) {
+    return <ErrorWithRetry errorMessage={error} onRetry={retry} />;
   }
 
   return (
     <ul className="sidebar-list custom-scrollbar">
       {contentRequests.map((cr) => {
-        const parts = cr.id.split("#");
-        const uuid = parts[parts.length - 1];
-        const to = `/cr/${uuid}`;
+        const to = `/cr/${cr.id}`;
         const isActive = location.pathname === to;
         return (
           <li key={cr.id}>
