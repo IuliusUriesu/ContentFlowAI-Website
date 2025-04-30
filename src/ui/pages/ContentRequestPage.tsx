@@ -5,6 +5,7 @@ import ErrorWithRetry from "../components/ErrorWithRetry";
 import SpinningLoader from "../components/SpinningLoader";
 import GeneratedContentGrid from "../components/GeneratedContentGrid";
 import { useContentRequest } from "../../hooks/useContentRequest";
+import { config } from "../../config/config";
 
 export default function ContentRequestPage() {
   const { id } = useParams();
@@ -14,8 +15,11 @@ export default function ContentRequestPage() {
     return <NavigateToCreate />;
   }
 
+  const title = contentRequest?.conciseIdeaContext ?? config.appTitle;
+
   return (
     <div className="w-full space-y-8">
+      <title>{title}</title>
       <div className="max-w-5xl mx-auto w-full space-y-8">
         {isLoading ? (
           <SpinningLoader />

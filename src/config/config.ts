@@ -9,4 +9,5 @@ export const config = {
     redirectUri: getEnvVariable("VITE_OIDC_CONFIG_REDIRECT_URI"),
     logoutUri: getEnvVariable("VITE_OIDC_CONFIG_LOGOUT_URI"),
   },
+  appTitle: "ContentFlowAI",
 };
