@@ -9,15 +9,15 @@ export default function ContentRequestInfoCard({ contentRequest }: ContentReques
   const { ideaContext, contentFormat } = contentRequest;
 
   return (
-    <div className="info-card">
+    <div className="card-base">
       <div>
         <ContentFormatPill contentFormat={contentFormat} />
       </div>
       <div>
-        <div className="text-xs font-medium text-[var(--color-text-muted)] uppercase">
+        <span className="text-xs font-medium text-[var(--color-text-muted)] uppercase block">
           Your idea
-        </div>
-        <div className="text-base text-[var(--color-text)]">{ideaContext}</div>
+        </span>
+        <span className="text-sm text-[var(--color-text)] block">{ideaContext}</span>
       </div>
     </div>
   );

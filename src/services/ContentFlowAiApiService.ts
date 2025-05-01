@@ -23,6 +23,11 @@ import {
   GetAllGeneratedContentResponse,
   GetAllGeneratedContentResponseSchema,
 } from "../model/api/GetAllGeneratedContentResponse";
+import { GetGeneratedContentPieceInput } from "../model/api/GetGeneratedContentPieceInput";
+import {
+  GetGeneratedContentPieceResponse,
+  GetGeneratedContentPieceResponseSchema,
+} from "../model/api/GetGeneratedContentPieceResponse";
 
 export class ContentFlowAiApiService {
   constructor(private apiClient: ApiClient) {
@@ -72,6 +77,19 @@ export class ContentFlowAiApiService {
       "Failed to retrieve generated content.",
       "GET",
       `/v1/content-requests/${contentRequestId}/generated-content`,
+    );
+  }
+
+  // GET /v1/generated-content/{generated-content-id}
+  async getGeneratedContentPiece(
+    input: GetGeneratedContentPieceInput,
+  ): Promise<GeneratedContentPiece> {
+    const { generatedContentId } = input;
+    return this.callApi<GetGeneratedContentPieceResponse>(
+      GetGeneratedContentPieceResponseSchema,
+      "Failed to retrieve content piece.",
+      "GET",
+      `/v1/generated-content/${generatedContentId}`,
     );
   }
 

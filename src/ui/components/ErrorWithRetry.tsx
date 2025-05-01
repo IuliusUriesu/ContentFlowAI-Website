@@ -7,7 +7,7 @@ interface ErrorWithRetryProps {
 
 export default function ErrorWithRetry({ errorMessage, onRetry }: ErrorWithRetryProps) {
   return (
-    <div className="centered-container">
+    <div className="centered-container h-full w-full">
       <span className="text-[var(--color-error)]">{errorMessage}</span>
       <button onClick={onRetry} className="retry-button" title="Retry">
         <RefreshCw className="w-6 h-6 text-[var(--color-error)]" />

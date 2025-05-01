@@ -6,8 +6,7 @@
 @theme {
   /* Fonts */
   --font-sans: "Lato", "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
-  --font-heading: "Montserrat", "Segoe UI", Roboto, "Helvetica Neue", Arial,
-    sans-serif;
+  --font-heading: "Montserrat", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* Backgrounds */
   --color-bg: #121212; /* deep charcoal */
@@ -115,7 +114,8 @@
     @apply space-y-2
       flex-1               /* fill all vertical space in the sidebar */
       min-h-0             /* allow itself to shrink below content height */
-      -mr-4;
+      -mr-4
+      overflow-y-auto;
   }
 
   .sidebar-item {
@@ -154,13 +154,12 @@
   }
 
   .custom-scrollbar {
-    @apply overflow-y-auto;
     scrollbar-width: thin;
     scrollbar-color: var(--color-border) transparent;
   }
 
   .custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
+    width: 6px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
@@ -172,6 +171,11 @@
     border-radius: 2px;
   }
 
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    cursor: auto;
+    background-color: var(--color-border-light);
+  }
+
   .chat-box-question {
     @apply text-3xl font-bold text-center text-[var(--color-text)];
   }
@@ -181,7 +185,7 @@
   }
 
   .chat-box-textarea {
-    @apply w-full bg-transparent text-[var(--color-text)] placeholder-[var(--color-text-muted)] resize-none outline-none min-h-[72px] pr-2;
+    @apply w-full bg-transparent text-[var(--color-text)] placeholder-[var(--color-text-muted)] resize-none outline-none min-h-[72px] pr-2 overflow-y-auto;
   }
 
   .chat-box-fields-container {
@@ -204,8 +208,8 @@
     @apply sm:ml-auto bg-[var(--color-primary)] p-3 rounded-full hover:brightness-110 transition text-white flex items-center justify-center cursor-pointer;
   }
 
-  .info-card {
-    @apply bg-[var(--color-surface)] border border-[var(--color-border-light)] rounded-4xl p-6 space-y-6;
+  .card-base {
+    @apply bg-[var(--color-surface)] border border-[var(--color-border-light)] rounded-4xl p-6 space-y-4;
   }
 
   .col-grid-3 {
@@ -218,5 +222,21 @@
 
   .centered-container {
     @apply flex-1 flex flex-col items-center justify-center space-y-2 px-4 text-center;
+  }
+
+  .go-back-button {
+    @apply flex-none p-2 rounded-full bg-[var(--color-surface)] border border-[var(--color-border-light)] hover:bg-[var(--color-border)] transition cursor-pointer;
+  }
+
+  .content-textarea {
+    @apply w-full h-full resize-none p-2 pl-4 focus:outline-none overflow-y-auto bg-transparent border-none;
+  }
+
+  .content-textarea-wrapper {
+    @apply relative flex-1 min-w-0 h-full rounded-4xl border border-[var(--color-border-light)] overflow-hidden bg-[var(--color-surface)] p-2 transition duration-300;
+  }
+
+  .content-textarea-wrapper-focus {
+    @apply border-[var(--color-primary)];
   }
 }
