@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router";
 import BaseLayout from "./ui/layouts/BaseLayout";
 import SidebarLayout from "./ui/layouts/SidebarLayout";
 import LandingPage from "./ui/pages/LandingPage";
@@ -35,6 +35,15 @@ function AppRouter() {
         </Route>
 
         <Route
+          path="/signin-callback"
+          element={
+            <RequireAuth>
+              <SigninCallback />
+            </RequireAuth>
+          }
+        />
+
+        <Route
           element={
             <RequireAuth>
               <BaseLayout />
@@ -63,6 +72,7 @@ function AppRouter() {
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const auth = useCognitoAuth();
+  const location = useLocation();
 
   useEffect(() => {
     if (!auth.isLoading && !auth.isAuthenticated) {
@@ -70,10 +80,10 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
       if (manualSignout) {
         sessionStorage.removeItem("manualSignout");
       } else {
-        auth.signinRedirect();
+        auth.signinRedirect({ state: { from: location.pathname + location.search } });
       }
     }
-  }, [auth]);
+  }, [auth, location.pathname, location.search]);
 
   if (auth.isLoading) {
     return (
@@ -84,4 +94,26 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
   }
 
   return auth.isAuthenticated ? children : null;
+}
+
+function SigninCallback() {
+  const auth = useCognitoAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!auth.isLoading && auth.isAuthenticated) {
+      const fromAny = (auth.user?.state as any)?.from; // eslint-disable-line @typescript-eslint/no-explicit-any
+      const from =
+        fromAny && typeof fromAny === "string" && !fromAny.startsWith("/signin-callback")
+          ? fromAny
+          : "/create";
+      navigate(from, { replace: true });
+    }
+  }, [auth, navigate]);
+
+  return (
+    <div className="p-2">
+      <Loader className="animate-spin" />
+    </div>
+  );
 }
