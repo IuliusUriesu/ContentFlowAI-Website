@@ -4,21 +4,25 @@ import { useState } from "react";
 
 interface GeneratedContentPieceEditingAreaProps {
   generatedContentPiece: GeneratedContentPiece;
+  onSave: (content: string) => void;
 }
 
 export default function GeneratedContentPieceEditingArea({
   generatedContentPiece,
+  onSave,
 }: GeneratedContentPieceEditingAreaProps) {
   const [isEdit, setIsEdit] = useState(false);
   const [content, setContent] = useState(generatedContentPiece.content);
 
   const handleSave = () => {
+    if (isEdit) {
+      onSave(content);
+    }
     setIsEdit((prev) => !prev);
   };
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row items-center gap-6 lg:gap-12">
-      {/** Left / read-only pane */}
+    <div className="flex-1 flex flex-col md:flex-row items-center gap-6 lg:gap-12">
       <div className="content-textarea-wrapper">
         <textarea
           value={generatedContentPiece.initialLlmContent}
@@ -28,14 +32,12 @@ export default function GeneratedContentPieceEditingArea({
         />
       </div>
 
-      {/** Arrow indicator */}
       <ArrowBigRight
         size={48}
-        className="hidden lg:block text-[var(--color-text-muted)] shrink-0"
+        className="hidden md:block text-[var(--color-text-muted)] shrink-0"
       />
-      <ArrowBigDown size={48} className="lg:hidden text-[var(--color-text-muted)] shrink-0" />
+      <ArrowBigDown size={48} className="md:hidden text-[var(--color-text-muted)] shrink-0" />
 
-      {/** Right / editable pane */}
       <div className={`content-textarea-wrapper ${isEdit ? "content-textarea-wrapper-focus" : ""}`}>
         <textarea
           value={content}

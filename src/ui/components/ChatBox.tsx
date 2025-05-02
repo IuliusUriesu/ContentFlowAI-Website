@@ -43,9 +43,11 @@ export default function ChatBox() {
     }
 
     create({
-      ideaContext: idea.trim(),
-      contentFormat,
-      contentPiecesCount: Number(contentPiecesCount),
+      body: {
+        ideaContext: idea.trim(),
+        contentFormat,
+        contentPiecesCount: Number(contentPiecesCount),
+      },
     }).then(() => resetFields());
   };
 

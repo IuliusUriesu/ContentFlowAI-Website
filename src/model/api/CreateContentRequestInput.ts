@@ -1,5 +1,7 @@
 export interface CreateContentRequestInput {
-  ideaContext: string;
-  contentFormat: string;
-  contentPiecesCount: number;
+  body: {
+    ideaContext: string;
+    contentFormat: string;
+    contentPiecesCount: number;
+  };
 }

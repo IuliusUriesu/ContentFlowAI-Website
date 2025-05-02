@@ -7,6 +7,8 @@ export const GeneratedContentPieceSchema = z.object({
   content: z.string(),
   initialLlmContent: z.string(),
   markedAsPosted: z.boolean(),
+  userId: z.string(),
+  contentRequestId: z.string(),
 });
 
 export type GeneratedContentPiece = z.infer<typeof GeneratedContentPieceSchema>;

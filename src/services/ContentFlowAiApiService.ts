@@ -4,30 +4,19 @@ import { ApiError, ContentFlowAiApiError } from "../utils/utils";
 import { CreateContentRequestInput } from "../model/api/CreateContentRequestInput";
 import { GetAllGeneratedContentInput } from "../model/api/GetAllGeneratedContentInput";
 import { GetContentRequestInput } from "../model/api/GetContentRequestInput";
-import { ContentRequest } from "../model/domain/ContentRequest";
+import { ContentRequest, ContentRequestSchema } from "../model/domain/ContentRequest";
+import { ContentRequestList, ContentRequestListSchema } from "../model/domain/ContentRequestList";
 import {
-  GetAllContentRequestsResponse,
-  GetAllContentRequestsResponseSchema,
-} from "../model/api/GetAllContentRequestsResponse";
-import { ErrorResponseSchema } from "../model/api/ErrorResponse";
+  GeneratedContentPieceList,
+  GeneratedContentPieceListSchema,
+} from "../model/domain/GeneratedContentPieceList";
 import {
-  GetContentRequestResponse,
-  GetContentRequestResponseSchema,
-} from "../model/api/GetContentRequestResponse";
-import {
-  CreateContentRequestResponse,
-  CreateContentRequestResponseSchema,
-} from "../model/api/CreateContentRequestResponse";
-import { GeneratedContentPiece } from "../model/domain/GeneratedContentPiece";
-import {
-  GetAllGeneratedContentResponse,
-  GetAllGeneratedContentResponseSchema,
-} from "../model/api/GetAllGeneratedContentResponse";
+  GeneratedContentPiece,
+  GeneratedContentPieceSchema,
+} from "../model/domain/GeneratedContentPiece";
 import { GetGeneratedContentPieceInput } from "../model/api/GetGeneratedContentPieceInput";
-import {
-  GetGeneratedContentPieceResponse,
-  GetGeneratedContentPieceResponseSchema,
-} from "../model/api/GetGeneratedContentPieceResponse";
+import { ErrorResponseSchema } from "../model/api/ErrorResponse";
+import { EditGeneratedContentPieceInput } from "../model/api/EditGeneratedContentPieceInput";
 
 export class ContentFlowAiApiService {
   constructor(private apiClient: ApiClient) {
@@ -36,8 +25,8 @@ export class ContentFlowAiApiService {
 
   // GET /v1/content-requests
   async getAllContentRequests(): Promise<ContentRequest[]> {
-    return this.callApi<GetAllContentRequestsResponse>(
-      GetAllContentRequestsResponseSchema,
+    return this.callApi<ContentRequestList>(
+      ContentRequestListSchema,
       "Failed to retrieve content requests.",
       "GET",
       "/v1/content-requests",
@@ -47,8 +36,8 @@ export class ContentFlowAiApiService {
   // GET /v1/content-requests/{content-request-id}
   async getContentRequest(input: GetContentRequestInput): Promise<ContentRequest> {
     const { contentRequestId } = input;
-    return this.callApi<GetContentRequestResponse>(
-      GetContentRequestResponseSchema,
+    return this.callApi<ContentRequest>(
+      ContentRequestSchema,
       "Failed to retrieve content request.",
       "GET",
       `/v1/content-requests/${contentRequestId}`,
@@ -57,13 +46,12 @@ export class ContentFlowAiApiService {
 
   // POST /v1/content-requests
   async createContentRequest(input: CreateContentRequestInput): Promise<ContentRequest> {
-    const body = input;
-    return this.callApi<CreateContentRequestResponse>(
-      CreateContentRequestResponseSchema,
+    return this.callApi<ContentRequest>(
+      ContentRequestSchema,
       "Failed to create content request.",
       "POST",
       "/v1/content-requests",
-      body,
+      input.body,
     );
   }
 
@@ -72,8 +60,8 @@ export class ContentFlowAiApiService {
     input: GetAllGeneratedContentInput,
   ): Promise<GeneratedContentPiece[]> {
     const { contentRequestId } = input;
-    return this.callApi<GetAllGeneratedContentResponse>(
-      GetAllGeneratedContentResponseSchema,
+    return this.callApi<GeneratedContentPieceList>(
+      GeneratedContentPieceListSchema,
       "Failed to retrieve generated content.",
       "GET",
       `/v1/content-requests/${contentRequestId}/generated-content`,
@@ -85,11 +73,25 @@ export class ContentFlowAiApiService {
     input: GetGeneratedContentPieceInput,
   ): Promise<GeneratedContentPiece> {
     const { generatedContentId } = input;
-    return this.callApi<GetGeneratedContentPieceResponse>(
-      GetGeneratedContentPieceResponseSchema,
+    return this.callApi<GeneratedContentPiece>(
+      GeneratedContentPieceSchema,
       "Failed to retrieve content piece.",
       "GET",
       `/v1/generated-content/${generatedContentId}`,
+    );
+  }
+
+  // PATCH /v1/generated-content/{generated-content-id}/content
+  async editGeneratedContentPiece(
+    input: EditGeneratedContentPieceInput,
+  ): Promise<GeneratedContentPiece> {
+    const { generatedContentId, body } = input;
+    return this.callApi<GeneratedContentPiece>(
+      GeneratedContentPieceSchema,
+      "Failed to edit generated content piece.",
+      "PATCH",
+      `/v1/generated-content/${generatedContentId}/content`,
+      body,
     );
   }
 

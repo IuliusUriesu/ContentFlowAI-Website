@@ -8,7 +8,8 @@ import GeneratedContentPieceEditingArea from "../components/GeneratedContentPiec
 
 export default function GeneratedContentPage() {
   const { id } = useParams();
-  const { generatedContentPiece, isLoading, error, retry } = useGeneratedContentPiece(id ?? "");
+  const { generatedContentPiece, isLoading, error, editContent, retryFetch } =
+    useGeneratedContentPiece(id ?? "");
 
   return (
     <div className="flex h-full w-full items-start">
@@ -18,11 +19,19 @@ export default function GeneratedContentPage() {
         {isLoading ? (
           <SpinningLoader />
         ) : error || !generatedContentPiece ? (
-          <ErrorWithRetry errorMessage={error ?? "Failed to load content piece."} onRetry={retry} />
+          <ErrorWithRetry
+            errorMessage={error ?? "Failed to load content piece."}
+            onRetry={retryFetch}
+          />
         ) : (
           <div className="flex flex-col gap-8 w-full h-full mx-auto max-w-7xl px-4">
             <GeneratedContentPieceHeader generatedContentPiece={generatedContentPiece} />
-            <GeneratedContentPieceEditingArea generatedContentPiece={generatedContentPiece} />
+            <GeneratedContentPieceEditingArea
+              generatedContentPiece={generatedContentPiece}
+              onSave={(content: string) =>
+                editContent({ generatedContentId: generatedContentPiece.id, body: { content } })
+              }
+            />
           </div>
         )}
       </div>

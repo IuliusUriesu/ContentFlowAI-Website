@@ -10,4 +10,5 @@ export const config = {
     logoutUri: getEnvVariable("VITE_OIDC_CONFIG_LOGOUT_URI"),
   },
   appTitle: "ContentFlowAI",
+  isProd: getEnvVariable("VITE_STAGE") === "Prod",
 };
