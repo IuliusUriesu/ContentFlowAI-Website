@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
 import { useGeneratedContentPiece } from "../../hooks/useGeneratedContentPiece";
-import GoBack from "../components/GoBack";
+import GoBackTo from "../components/GoBackTo";
 import SpinningLoader from "../components/SpinningLoader";
 import ErrorWithRetry from "../components/ErrorWithRetry";
 import GeneratedContentPieceHeader from "../components/GeneratedContentPieceHeader";
@@ -16,10 +16,12 @@ export default function GeneratedContentPage() {
 
   const title = <title>{contentRequest?.conciseIdeaContext ?? config.appTitle}</title>;
 
+  const contentRequestUrl = contentRequest ? `/cr/${contentRequest?.id}` : undefined;
+
   return (
     <div className="flex h-full w-full items-start">
       {title}
-      <GoBack />
+      <GoBackTo to={contentRequestUrl} />
 
       <div className="w-full h-full">
         {isLoading ? (
