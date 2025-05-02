@@ -5,14 +5,20 @@ import SpinningLoader from "../components/SpinningLoader";
 import ErrorWithRetry from "../components/ErrorWithRetry";
 import GeneratedContentPieceHeader from "../components/GeneratedContentPieceHeader";
 import GeneratedContentPieceEditingArea from "../components/GeneratedContentPieceEditingArea";
+import { useContentRequest } from "../../hooks/useContentRequest";
+import { config } from "../../config/config";
 
 export default function GeneratedContentPage() {
   const { id } = useParams();
   const { generatedContentPiece, isLoading, error, editContent, retryFetch } =
     useGeneratedContentPiece(id ?? "");
+  const { contentRequest } = useContentRequest(generatedContentPiece?.contentRequestId ?? "");
+
+  const title = <title>{contentRequest?.conciseIdeaContext ?? config.appTitle}</title>;
 
   return (
     <div className="flex h-full w-full items-start">
+      {title}
       <GoBack />
 
       <div className="w-full h-full">

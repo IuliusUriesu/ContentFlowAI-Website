@@ -13,6 +13,7 @@ import { ServiceProvider } from "./context/ServiceProvider";
 import { useCognitoAuth } from "./hooks/useCognitoAuth";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
+import { config } from "./config/config";
 
 export default function App() {
   return (
@@ -113,6 +114,7 @@ function SigninCallback() {
 
   return (
     <div className="p-2">
+      <title>{config.appTitle}</title>
       <Loader className="animate-spin" />
     </div>
   );
