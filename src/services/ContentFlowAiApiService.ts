@@ -1,58 +1,96 @@
-import { ZodType } from "zod";
 import { ApiClient } from "../lib/ApiClient";
-import { ApiError, ContentFlowAiApiError } from "../utils/utils";
+import { ApiError, ContentFlowAiApiError, parseObject } from "../utils/utils";
 import { CreateContentRequestInput } from "../model/api/CreateContentRequestInput";
 import { GetAllGeneratedContentInput } from "../model/api/GetAllGeneratedContentInput";
 import { GetContentRequestInput } from "../model/api/GetContentRequestInput";
 import { ContentRequest, ContentRequestSchema } from "../model/domain/ContentRequest";
-import { ContentRequestList, ContentRequestListSchema } from "../model/domain/ContentRequestList";
-import {
-  GeneratedContentPieceList,
-  GeneratedContentPieceListSchema,
-} from "../model/domain/GeneratedContentPieceList";
+import { ContentRequestListSchema } from "../model/domain/ContentRequestList";
+import { GeneratedContentPieceListSchema } from "../model/domain/GeneratedContentPieceList";
 import {
   GeneratedContentPiece,
   GeneratedContentPieceSchema,
 } from "../model/domain/GeneratedContentPiece";
 import { GetGeneratedContentPieceInput } from "../model/api/GetGeneratedContentPieceInput";
-import { ErrorResponseSchema } from "../model/api/ErrorResponse";
+import { ErrorResponse, ErrorResponseSchema } from "../model/api/ErrorResponse";
 import { EditGeneratedContentPieceInput } from "../model/api/EditGeneratedContentPieceInput";
+import { UserProfile, UserProfileSchema } from "../model/domain/UserProfile";
+import { CreateUserProfileInput } from "../model/api/CreateUserProfileInput";
+
+const defaultErrorMessage = "Couldn't process the server's response. Please try again.";
 
 export class ContentFlowAiApiService {
   constructor(private apiClient: ApiClient) {
     this.apiClient = apiClient;
   }
 
+  // GET /v1/profile
+  async getUserProfile(): Promise<UserProfile | null> {
+    let response: unknown;
+    try {
+      response = await this.apiClient.call("GET", "/v1/profile");
+    } catch (error) {
+      if (error instanceof ApiError) {
+        if (error.status === 404) return null;
+        else this.handleApiError(error);
+      } else throw new ContentFlowAiApiError(defaultErrorMessage);
+    }
+
+    return parseObject(response, UserProfileSchema, defaultErrorMessage);
+  }
+
+  // POST /v1/profile
+  async createUserProfile(input: CreateUserProfileInput): Promise<UserProfile> {
+    const { body } = input;
+    let response: unknown;
+    try {
+      response = await this.apiClient.call("POST", "/v1/profile", body);
+    } catch (error) {
+      if (error instanceof ApiError) this.handleApiError(error);
+      else throw new ContentFlowAiApiError(defaultErrorMessage);
+    }
+
+    return parseObject(response, UserProfileSchema, defaultErrorMessage);
+  }
+
   // GET /v1/content-requests
   async getAllContentRequests(): Promise<ContentRequest[]> {
-    return this.callApi<ContentRequestList>(
-      ContentRequestListSchema,
-      "Failed to retrieve content requests.",
-      "GET",
-      "/v1/content-requests",
-    );
+    let response: unknown;
+    try {
+      response = await this.apiClient.call("GET", "/v1/content-requests");
+    } catch (error) {
+      if (error instanceof ApiError) this.handleApiError(error);
+      else throw new ContentFlowAiApiError(defaultErrorMessage);
+    }
+
+    return parseObject(response, ContentRequestListSchema, defaultErrorMessage);
   }
 
   // GET /v1/content-requests/{content-request-id}
   async getContentRequest(input: GetContentRequestInput): Promise<ContentRequest> {
     const { contentRequestId } = input;
-    return this.callApi<ContentRequest>(
-      ContentRequestSchema,
-      "Failed to retrieve content request.",
-      "GET",
-      `/v1/content-requests/${contentRequestId}`,
-    );
+    let response: unknown;
+    try {
+      response = await this.apiClient.call("GET", `/v1/content-requests/${contentRequestId}`);
+    } catch (error) {
+      if (error instanceof ApiError) this.handleApiError(error);
+      else throw new ContentFlowAiApiError(defaultErrorMessage);
+    }
+
+    return parseObject(response, ContentRequestSchema, defaultErrorMessage);
   }
 
   // POST /v1/content-requests
   async createContentRequest(input: CreateContentRequestInput): Promise<ContentRequest> {
-    return this.callApi<ContentRequest>(
-      ContentRequestSchema,
-      "Failed to create content request.",
-      "POST",
-      "/v1/content-requests",
-      input.body,
-    );
+    const { body } = input;
+    let response: unknown;
+    try {
+      response = await this.apiClient.call("POST", "/v1/content-requests", body);
+    } catch (error) {
+      if (error instanceof ApiError) this.handleApiError(error);
+      else throw new ContentFlowAiApiError(defaultErrorMessage);
+    }
+
+    return parseObject(response, ContentRequestSchema, defaultErrorMessage);
   }
 
   // GET /v1/content-requests/{content-request-id}/generated-content
@@ -60,12 +98,18 @@ export class ContentFlowAiApiService {
     input: GetAllGeneratedContentInput,
   ): Promise<GeneratedContentPiece[]> {
     const { contentRequestId } = input;
-    return this.callApi<GeneratedContentPieceList>(
-      GeneratedContentPieceListSchema,
-      "Failed to retrieve generated content.",
-      "GET",
-      `/v1/content-requests/${contentRequestId}/generated-content`,
-    );
+    let response: unknown;
+    try {
+      response = await this.apiClient.call(
+        "GET",
+        `/v1/content-requests/${contentRequestId}/generated-content`,
+      );
+    } catch (error) {
+      if (error instanceof ApiError) this.handleApiError(error);
+      else throw new ContentFlowAiApiError(defaultErrorMessage);
+    }
+
+    return parseObject(response, GeneratedContentPieceListSchema, defaultErrorMessage);
   }
 
   // GET /v1/generated-content/{generated-content-id}
@@ -73,12 +117,15 @@ export class ContentFlowAiApiService {
     input: GetGeneratedContentPieceInput,
   ): Promise<GeneratedContentPiece> {
     const { generatedContentId } = input;
-    return this.callApi<GeneratedContentPiece>(
-      GeneratedContentPieceSchema,
-      "Failed to retrieve content piece.",
-      "GET",
-      `/v1/generated-content/${generatedContentId}`,
-    );
+    let response: unknown;
+    try {
+      response = await this.apiClient.call("GET", `/v1/generated-content/${generatedContentId}`);
+    } catch (error) {
+      if (error instanceof ApiError) this.handleApiError(error);
+      else throw new ContentFlowAiApiError(defaultErrorMessage);
+    }
+
+    return parseObject(response, GeneratedContentPieceSchema, defaultErrorMessage);
   }
 
   // PATCH /v1/generated-content/{generated-content-id}/content
@@ -86,48 +133,32 @@ export class ContentFlowAiApiService {
     input: EditGeneratedContentPieceInput,
   ): Promise<GeneratedContentPiece> {
     const { generatedContentId, body } = input;
-    return this.callApi<GeneratedContentPiece>(
-      GeneratedContentPieceSchema,
-      "Failed to edit generated content piece.",
-      "PATCH",
-      `/v1/generated-content/${generatedContentId}/content`,
-      body,
-    );
-  }
-
-  private async callApi<T>(
-    zodSchema: ZodType<T, any, unknown>, // eslint-disable-line @typescript-eslint/no-explicit-any
-    defaultErrorMessage: string,
-    method: string,
-    path: string,
-    body?: unknown,
-  ): Promise<T> {
     let response: unknown;
     try {
-      response = await this.apiClient.call(method, path, body);
+      response = await this.apiClient.call(
+        "PATCH",
+        `/v1/generated-content/${generatedContentId}/content`,
+        body,
+      );
     } catch (error) {
-      console.error(error);
-      this.handleApiError(error as ApiError, defaultErrorMessage);
+      if (error instanceof ApiError) this.handleApiError(error);
+      else throw new ContentFlowAiApiError(defaultErrorMessage);
     }
 
-    const parsedResponse = zodSchema.safeParse(response);
-    if (parsedResponse.success) {
-      return parsedResponse.data;
-    } else {
-      throw new ContentFlowAiApiError(defaultErrorMessage);
-    }
+    return parseObject(response, GeneratedContentPieceSchema, defaultErrorMessage);
   }
 
-  private handleApiError(apiError: ApiError, defaultErrorMessage: string) {
+  private handleApiError(apiError: ApiError) {
     if (!apiError.body) {
-      throw new ContentFlowAiApiError(defaultErrorMessage);
+      throw new ContentFlowAiApiError(apiError.message);
     }
 
-    const parsedErrorBody = ErrorResponseSchema.safeParse(apiError.body);
-    if (parsedErrorBody.success) {
-      throw new ContentFlowAiApiError(parsedErrorBody.data.errorMessage);
-    } else {
-      throw new ContentFlowAiApiError(defaultErrorMessage);
-    }
+    const parsedErrorBody = parseObject<ErrorResponse>(
+      apiError.body,
+      ErrorResponseSchema,
+      defaultErrorMessage,
+    );
+
+    throw new ContentFlowAiApiError(parsedErrorBody.errorMessage);
   }
 }

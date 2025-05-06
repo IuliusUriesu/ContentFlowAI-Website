@@ -62,7 +62,7 @@ export default function ChatBox() {
           <textarea
             value={idea}
             onChange={(e) => setIdea(e.target.value)}
-            placeholder="Type your idea here..."
+            placeholder="Type your idea..."
             className="chat-box-textarea custom-scrollbar"
           />
 

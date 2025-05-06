@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
 import TopNavigationBar from "../components/TopNavigationBar";
 
-export default function BaseLayout() {
+export default function TopNavBarLayout() {
   return (
     <div className="app-container">
       <TopNavigationBar />

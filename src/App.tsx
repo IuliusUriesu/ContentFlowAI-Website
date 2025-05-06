@@ -1,19 +1,8 @@
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router";
-import BaseLayout from "./ui/layouts/BaseLayout";
-import SidebarLayout from "./ui/layouts/SidebarLayout";
-import LandingPage from "./ui/pages/LandingPage";
-import CreateContentRequestPage from "./ui/pages/CreateContentRequestPage";
-import ContentRequestPage from "./ui/pages/ContentRequestPage";
-import GeneratedContentPage from "./ui/pages/GeneratedContentPage";
 import CognitoAuthProvider from "./context/CognitoAuthProvider";
-import NavigateToCreate from "./ui/components/NavigateToCreate";
 import { SWRConfig } from "swr";
 import { swrConfig } from "./config/swrConfig";
 import { ServiceProvider } from "./context/ServiceProvider";
-import { useCognitoAuth } from "./hooks/useCognitoAuth";
-import { useEffect } from "react";
-import { Loader } from "lucide-react";
-import { config } from "./config/config";
+import AppRouter from "./ui/routing/AppRouter";
 
 export default function App() {
   return (
@@ -24,98 +13,5 @@ export default function App() {
         </ServiceProvider>
       </CognitoAuthProvider>
     </SWRConfig>
-  );
-}
-
-function AppRouter() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<BaseLayout />}>
-          <Route path="/" element={<LandingPage />} />
-        </Route>
-
-        <Route
-          path="/signin-callback"
-          element={
-            <RequireAuth>
-              <SigninCallback />
-            </RequireAuth>
-          }
-        />
-
-        <Route
-          element={
-            <RequireAuth>
-              <BaseLayout />
-            </RequireAuth>
-          }
-        >
-          <Route path="gc/:id" element={<GeneratedContentPage />} />
-        </Route>
-
-        <Route
-          element={
-            <RequireAuth>
-              <SidebarLayout />
-            </RequireAuth>
-          }
-        >
-          <Route path="create" element={<CreateContentRequestPage />} />
-          <Route path="cr/:id" element={<ContentRequestPage />} />
-        </Route>
-
-        <Route path="*" element={<NavigateToCreate />} />
-      </Routes>
-    </BrowserRouter>
-  );
-}
-
-function RequireAuth({ children }: { children: React.ReactNode }) {
-  const auth = useCognitoAuth();
-  const location = useLocation();
-
-  useEffect(() => {
-    if (!auth.isLoading && !auth.isAuthenticated) {
-      const manualSignout = sessionStorage.getItem("manualSignout") === "1";
-      if (manualSignout) {
-        sessionStorage.removeItem("manualSignout");
-      } else {
-        auth.signinRedirect({ state: { from: location.pathname + location.search } });
-      }
-    }
-  }, [auth, location.pathname, location.search]);
-
-  if (auth.isLoading) {
-    return (
-      <div className="p-2">
-        <Loader className="animate-spin" />
-      </div>
-    );
-  }
-
-  return auth.isAuthenticated ? children : null;
-}
-
-function SigninCallback() {
-  const auth = useCognitoAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!auth.isLoading && auth.isAuthenticated) {
-      const fromAny = (auth.user?.state as any)?.from; // eslint-disable-line @typescript-eslint/no-explicit-any
-      const from =
-        fromAny && typeof fromAny === "string" && !fromAny.startsWith("/signin-callback")
-          ? fromAny
-          : "/create";
-      navigate(from, { replace: true });
-    }
-  }, [auth, navigate]);
-
-  return (
-    <div className="p-2">
-      <title>{config.appTitle}</title>
-      <Loader className="animate-spin" />
-    </div>
   );
 }

@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { useCognitoAuth } from "./useCognitoAuth";
 import { useServices } from "./useServices";
 import { CreateContentRequestInput } from "../model/api/CreateContentRequestInput";
 import { useSWRConfig } from "swr";
@@ -14,7 +13,6 @@ type UseCreateContentRequestReturnType = {
 const swrKey = "content-requests";
 
 export const useCreateContentRequest = (): UseCreateContentRequestReturnType => {
-  const auth = useCognitoAuth();
   const { apiService } = useServices();
   const { mutate } = useSWRConfig();
 
@@ -23,17 +21,6 @@ export const useCreateContentRequest = (): UseCreateContentRequestReturnType => 
 
   const create = useCallback(
     async (input: CreateContentRequestInput) => {
-      let errorMessage: string | undefined;
-      if (!auth.isAuthenticated) {
-        errorMessage = "Sign in to start creating content.";
-      }
-
-      if (errorMessage) {
-        setIsLoading(false);
-        setError(errorMessage);
-        throw new Error(errorMessage);
-      }
-
       setIsLoading(true);
       setError(null);
 
@@ -49,7 +36,7 @@ export const useCreateContentRequest = (): UseCreateContentRequestReturnType => 
         setIsLoading(false);
       }
     },
-    [auth.isAuthenticated, apiService, mutate],
+    [apiService, mutate],
   );
 
   return {

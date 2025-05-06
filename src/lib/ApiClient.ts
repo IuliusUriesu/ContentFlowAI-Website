@@ -28,16 +28,14 @@ export class ApiClient {
         body: JSON.stringify(body),
       });
     } catch (error) {
-      console.error(error);
-      throw new ApiError("Request failed.");
+      throw new ApiError("A network error occurred. Please check your connection and try again.");
     }
 
     let responseBody: unknown;
     try {
       responseBody = await response.json();
     } catch (error) {
-      console.error(error);
-      throw new ApiError("Failed to parse response body.");
+      throw new ApiError("Unable to process the server's response. Please try again.");
     }
 
     if (!response.ok) {
