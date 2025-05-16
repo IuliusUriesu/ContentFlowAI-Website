@@ -10,7 +10,7 @@ import { config } from "../../config/config";
 
 export default function GeneratedContentPage() {
   const { id } = useParams();
-  const { generatedContentPiece, isLoading, error, editContent, retryFetch } =
+  const { generatedContentPiece, isLoading, error, editContent, editMarkedAsPosted, retryFetch } =
     useGeneratedContentPiece(id ?? "");
   const { contentRequest } = useContentRequest(generatedContentPiece?.contentRequestId ?? "");
 
@@ -33,7 +33,15 @@ export default function GeneratedContentPage() {
           />
         ) : (
           <div className="flex flex-col gap-8 w-full h-full mx-auto max-w-7xl px-4">
-            <GeneratedContentPieceHeader generatedContentPiece={generatedContentPiece} />
+            <GeneratedContentPieceHeader
+              generatedContentPiece={generatedContentPiece}
+              onStarClick={(markedAsPosted: boolean) =>
+                editMarkedAsPosted({
+                  generatedContentId: generatedContentPiece.id,
+                  body: { markedAsPosted },
+                })
+              }
+            />
             <GeneratedContentPieceEditingArea
               generatedContentPiece={generatedContentPiece}
               onSave={(content: string) =>

@@ -15,6 +15,7 @@ import { ErrorResponse, ErrorResponseSchema } from "../model/api/ErrorResponse";
 import { EditGeneratedContentPieceInput } from "../model/api/EditGeneratedContentPieceInput";
 import { UserProfile, UserProfileSchema } from "../model/domain/UserProfile";
 import { CreateUserProfileInput } from "../model/api/CreateUserProfileInput";
+import { EditGeneratedContentPieceMarkedAsPostedInput } from "../model/api/EditGeneratedContentPieceMarkedAsPostedInput";
 
 const defaultErrorMessage = "Couldn't process the server's response. Please try again.";
 
@@ -138,6 +139,26 @@ export class ContentFlowAiApiService {
       response = await this.apiClient.call(
         "PATCH",
         `/v1/generated-content/${generatedContentId}/content`,
+        body,
+      );
+    } catch (error) {
+      if (error instanceof ApiError) this.handleApiError(error);
+      else throw new ContentFlowAiApiError(defaultErrorMessage);
+    }
+
+    return parseObject(response, GeneratedContentPieceSchema, defaultErrorMessage);
+  }
+
+  // PATCH /v1/generated-content/{generated-content-id}/marked-as-posted
+  async editGeneratedContentPieceMarkedAsPosted(
+    input: EditGeneratedContentPieceMarkedAsPostedInput,
+  ): Promise<GeneratedContentPiece> {
+    const { generatedContentId, body } = input;
+    let response: unknown;
+    try {
+      response = await this.apiClient.call(
+        "PATCH",
+        `/v1/generated-content/${generatedContentId}/marked-as-posted`,
         body,
       );
     } catch (error) {

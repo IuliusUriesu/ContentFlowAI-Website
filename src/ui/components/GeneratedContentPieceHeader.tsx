@@ -1,12 +1,15 @@
+import { Star } from "lucide-react";
 import { GeneratedContentPiece } from "../../model/domain/GeneratedContentPiece";
 import ContentFormatPill from "./ContentFormatPill";
 
 interface GeneratedContentPieceHeaderProps {
   generatedContentPiece: GeneratedContentPiece;
+  onStarClick: (markedAsPosted: boolean) => void;
 }
 
 export default function GeneratedContentPieceHeader({
   generatedContentPiece,
+  onStarClick,
 }: GeneratedContentPieceHeaderProps) {
   return (
     <div className="card-base">
@@ -19,11 +22,15 @@ export default function GeneratedContentPieceHeader({
         </span>
         <span className="text-sm text-[var(--color-text)] block">{generatedContentPiece.idea}</span>
       </div>
-      {/* <div className="flex justify-end space-x-2 -mt-2 -mb-4">
-        <Info size={20} />
-        <Star size={20} />
-        <Trash2 size={20} />
-      </div> */}
+      <div className="flex justify-end space-x-2 -mt-2 -mb-4">
+        <button
+          onClick={() => onStarClick(!generatedContentPiece.markedAsPosted)}
+          className={`primary-button p-2 font-bold
+            ${generatedContentPiece.markedAsPosted ? "bg-warning hover:bg-transparent" : "bg-transparent hover:bg-warning"}`}
+        >
+          <Star size={16} />
+        </button>
+      </div>
     </div>
   );
 }
