@@ -16,9 +16,7 @@ export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<TopNavBarLayout />}>
-          <Route path="/" element={<LandingPage />} />
-        </Route>
+        <Route path="/" element={<LandingPage />} />
 
         <Route element={<RequireAuth />}>
           <Route path="signin-callback" element={<SigninCallback />} />
