@@ -23,7 +23,7 @@ export const useContentRequest = (id: string): UseContentRequestReturnType => {
   } = useSWR(
     id.length > 0 ? contentRequestKey : null,
     () => apiService.getContentRequest({ contentRequestId: id }),
-    { dedupingInterval: 5000 },
+    { refreshInterval: (data) => (data?.isRequestProcessed ? 0 : 5000), revalidateIfStale: false },
   );
 
   const generatedContentKey = ["content-requests", id, "generated-content"];
@@ -32,9 +32,9 @@ export const useContentRequest = (id: string): UseContentRequestReturnType => {
     isLoading: isLoadingGeneratedContent,
     error: errorGeneratedContent,
   } = useSWR(
-    id.length > 0 ? generatedContentKey : null,
+    id.length > 0 && contentRequest?.isRequestProcessed ? generatedContentKey : null,
     () => apiService.getAllGeneratedContent({ contentRequestId: id }),
-    { dedupingInterval: 5000 },
+    { revalidateIfStale: false },
   );
 
   const error = errorContentRequest ?? errorGeneratedContent ?? null;
