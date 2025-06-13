@@ -1,54 +1,98 @@
-# React + TypeScript + Vite
+# ContentFlowAI-Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This package contains the frontend for the ContentFlowAI application, built with **React + TypeScript** and styled using **Tailwind CSS**.
 
-Currently, two official plugins are available:
+The app is a static website deployed to **Amazon S3** and served globally via **CloudFront CDN**. It connects to a backend powered by AWS Lambda and API Gateway, and uses **Amazon Cognito** for user authentication.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Live at: [https://content.cleverlayer.com](https://content.cleverlayer.com)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## ⚙️ Tech Stack
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- **Framework**: React + TypeScript
+- **Styling**: Tailwind CSS
+- **Authentication**: `react-oidc-client`, `oidc-client-ts` (via Amazon Cognito)
+- **Hosting**: S3 + CloudFront (deployed via CDK)
+
+---
+
+## 🔐 Authentication
+
+All users must log in through **Amazon Cognito**. The frontend integrates with Cognito using the OIDC protocol to authenticate users and retrieve access tokens, which are used to securely call protected API endpoints.
+
+---
+
+## 🌐 Environment Variables
+
+This project uses multiple environment configuration files for different stages:
+
+- `.env.test` – for local testing
+- `.env.dev` – for development stage
+- `.env.prod` – for production deployment
+
+These files control the API base URL, Cognito client details, and other environment-specific values.
+
+---
+
+## 📁 Project Structure
+
+```text
+contentflowai-website/
+├── public/                        # Static public assets
+├── src/
+│   ├── config/                    # Static configuration values
+│   ├── context/                   # React context providers
+│   ├── hooks/                     # Custom React hooks
+│   ├── lib/                       # Low-level libraries or wrappers
+│   ├── model/                     # Types and interfaces
+│   ├── reducers/                  # Global state reducers
+│   ├── services/                  # API services and integrations
+│   ├── ui/
+│   │   ├── components/            # Reusable UI components
+│   │   ├── layouts/               # Page layout components
+│   │   ├── routing/               # Route definitions and guards
+│   │   └── pages/                 # Page-level views
+│   ├── utils/                     # Helper functions and utilities
+│   ├── App.tsx                    # Root application component
+│   └── main.tsx                   # App entry point
+├── .env.*                         # Environment configs
+├── index.html
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+└── README.md
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🧪 Local Development
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+To run the app locally:
+
+```bash
+npm install
+npm run dev
 ```
+
+The app will be available at [http://localhost:5173](http://localhost:5173).
+
+Make sure you have a valid `.env.test` file set up before running locally.
+
+---
+
+## 🚀 Production Build
+
+To build the app for production deployment:
+
+```bash
+npm run build:prod
+```
+
+This generates a static site in the `build/` folder, ready to be uploaded to the S3 bucket configured via CDK.
+
+---
+
+## 🛠 Maintainer
+
+Built and maintained by Iulius Urieșu.
